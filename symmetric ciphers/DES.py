@@ -247,4 +247,6 @@ class DES:
             return [right,Nleft]
     
         return self.leftAndRight(right,Nleft,counter+1)
+        
 
+        
