@@ -453,3 +453,98 @@ class ClassicalCiphers:
                 row -= 1
      
         return result
+    # encrypts text with column transposition cipher
+    def columnTranspositionEncrypt(self,text, key):
+        result = ""
+     
+        # create matrix to cipher plain text key = rows, length(text) = columns
+        # filling the rail matrix to distinguish filled spaces from blank ones
+        rail = [['\n' for i in range(len(text))] for j in range(key)]
+     
+        # to find the direction
+        dir_down = False
+        row, col = 0, 0
+     
+        for i in range(len(text)):
+            # check the direction of flow
+            # reverse the direction if we've just filled the top or bottom rail
+            if (row == 0) or (row == key - 1):
+                dir_down = not dir_down
+     
+            # fill the corresponding alphabet
+            rail[row][col] = text[i]
+            col += 1
+     
+            # find the next row using direction flag
+            if dir_down:
+                row += 1
+            else:
+                row -= 1
+     
+        # now we can construct the cipher using the rail matrix
+        for i in range(key):
+            for j in range(len(text)):
+                if rail[i][j] != '\n':
+                    result += rail[i][j]
+     
+        return result
+    # decrypts text with column transposition cipher
+    def columnTranspositionDecrypt(self,text, key):
+        result = ""
+     
+        # create matrix to cipher plain text key = rows, length(text) = columns
+        # filling the rail matrix to distinguish filled spaces from blank ones
+        rail = [['\n' for i in range(len(text))] for j in range(key)]
+     
+        # to find the direction
+        dir_down = None
+        row, col = 0, 0
+     
+        # mark the places with '*'
+        for i in range(len(text)):
+            # check the direction of flow
+            if row == 0:
+                dir_down = True
+            if row == key - 1:
+                dir_down = False
+     
+            # place the marker
+            rail[row][col] = '*'
+            col += 1
+     
+            # find the next row using direction flag
+            if dir_down:
+                row += 1
+            else:
+                row -= 1
+     
+        # now we can construct the fill the rail matrix
+        index = 0
+        for i in range(key):
+            for j in range(len(text)):
+                if ((rail[i][j] == '*') and (index < len(text))):
+                    rail[i][j] = text[index]
+                    index += 1
+     
+        # now read the matrix in zig-zag manner to construct the resultant text
+        row, col = 0, 0
+        for i in range(len(text)):
+            # check the direction of flow
+            if row == 0:
+                dir_down = True
+            if row == key - 1:
+                dir_down = False
+     
+            # place the marker
+            if (rail[row][col] != '*'):
+                result += rail[row][col]
+                col += 1
+     
+            # find the next row using direction flag
+            if dir_down:
+                row += 1
+            else:
+                row -= 1
+     
+        return result
+     

@@ -1,4 +1,4 @@
 # Cryptography
 TODO:
-- classical ciphers
-- des decription
+- key validation for classical cipher and review
+- des decryption
