@@ -2,6 +2,7 @@ class ClassicalCiphers:
     def __init__(self):
         pass
         
+        
     def caesarEncrypt(self,text,s):
         result = ""
      
@@ -35,6 +36,12 @@ class ClassicalCiphers:
      
         return result
         
+    # creak cesar cipher
+    def crackCaesar(self,text):
+        for i in range(26):
+            print(i, self.caesarDecrypt(text, i))
+    
+    
     # encrypts text with the Vigenere cipher
     def vigenereEncrypt(self,text, key):
         result = ""
@@ -68,8 +75,10 @@ class ClassicalCiphers:
             else:
                 result += chr((ord(char) - ord(key[i % len(key)]) + 26) % 26 + 97)
      
-        return result
+        return result 
+
         
+    
     # encrypts text with the Playfair cipher
     def playfairEncrypt(self,text, key):
         result = ""
@@ -262,6 +271,9 @@ class ClassicalCiphers:
                 result += chr(key.index(char) + 65)
      
         return result
+        
+
+        
     # encrypts text with railfence cipher
     def railfenceEncrypt(self,text, key):
         result = ""
@@ -548,3 +560,62 @@ class ClassicalCiphers:
      
         return result
      
+        
+    def generateIC(self,coset):
+        cosetIC = 0
+        for c in coset:
+            c = c.lower()
+            count = [0] * 26
+            n = 0
+            for i in range(0, len(c)):
+                val = ord(c[i]) - ord('a')
+                if (val >= 0 and val <= 25):
+                    count[val] = count[val] + 1
+                    n += 1
+            total = 0.0
+            for i in range(0, len(count)):
+                total += count[i] * (count[i] - 1)
+            total = total / (n * (n - 1))
+            cosetIC += total
+        cosetIC = cosetIC / len(coset)
+        return cosetIC
+
+
+
+    def cosets(string,numb):
+        chars = []
+        chars[:] = string
+        temp = []
+        res = []
+        counter=0
+        start =0
+        for i in range(0, 3):
+            for x in range(i, len(chars),numb):
+                temp.append(chars[x])
+                counter+=1
+    
+            res.append(''.join(temp[start:]))
+            start = counter
+    
+    
+        return res
+
+
+    def getTheLengthOfVigenereKey(self,cipher):
+        listOfCos =[]
+        sum = 0
+        avg =0
+        res =-9999999999999
+        answer = 0
+        for x in range(1,10):
+            listOfCos = cosets(cipher,x)
+            avg = generateIC(listOfCos)
+            if avg > res:
+                res = avg
+                answer = x
+    
+        return answer
+
+
+
+
