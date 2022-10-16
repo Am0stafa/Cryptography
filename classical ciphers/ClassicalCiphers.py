@@ -1,3 +1,7 @@
+import string 
+
+import matplotlib.pyplot as plt
+
 class ClassicalCiphers:
     def __init__(self):
         pass
@@ -582,7 +586,7 @@ class ClassicalCiphers:
 
 
 
-    def cosets(string,numb):
+    def cosets(self,string,numb):
         chars = []
         chars[:] = string
         temp = []
@@ -608,14 +612,59 @@ class ClassicalCiphers:
         res =-9999999999999
         answer = 0
         for x in range(1,10):
-            listOfCos = cosets(cipher,x)
-            avg = generateIC(listOfCos)
+            listOfCos = self.cosets(cipher,x)
+            avg = self.generateIC(listOfCos)
             if avg > res:
                 res = avg
                 answer = x
     
         return answer
 
+    # frequency analysis
+    def frequencyAnalysis(self,text):
+        # count the frequency of each letter
+        count = [0] * 26
+        for i in range(0, len(text)):
+            val = ord(text[i]) - ord('a')
+            if (val >= 0 and val <= 25):
+                count[val] = count[val] + 1
+        return count
+
+    # we can use the frequency analysis to find the most common letter in the text
+    
+    def findMostCommonLetter(self,text):
+        count = self.frequencyAnalysis(text)
+        max = 0
+        for i in range(0, len(count)):
+            if (count[i] > count[max]):
+                max = i
+        return chr(max + ord('a'))
+    
+    # we can use the frequency analysis to find the least common letter in the text
+    
+    def findLeastCommonLetter(self,text):
+        count = self.frequencyAnalysis(text)
+        min = 0
+        for i in range(0, len(count)):
+            if (count[i] < count[min]):
+                min = i
+        return chr(min + ord('a'))
+    #draws a histogram of the frequency of each letter in the text
+    def drawHistogram(self,text):
+        count = self.frequencyAnalysis(text)
+        plt.bar(range(len(count)), count, align='center')
+        plt.xticks(range(len(count)), list(string.ascii_lowercase))
+        plt.show()
+    
+    # crack the cipher by finding the key
+    def crackVigenere(self,cipher):
+        key = ""
+        length = self.getTheLengthOfVigenereKey(cipher)
+        cosets = self.cosets(cipher,length)
+        for coset in cosets:
+            key += self.findMostCommonLetter(coset)
+        return key
+        
 
 
 
