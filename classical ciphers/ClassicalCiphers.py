@@ -1,5 +1,4 @@
 import string 
-
 import matplotlib.pyplot as plt
 
 class ClassicalCiphers:
@@ -7,7 +6,7 @@ class ClassicalCiphers:
         pass
         
         
-    def caesarEncrypt(self,text,s):
+    def caesarEncrypt(self,text,key):
         result = ""
      
         for i in range(len(text)):
@@ -15,16 +14,16 @@ class ClassicalCiphers:
      
             # Encrypt uppercase characters
             if (char.isupper()):
-                result += chr((ord(char) + s-65) % 26 + 65)
+                result += chr((ord(char) + key-65) % 26 + 65)
      
             # Encrypt lowercase characters
             else:
-                result += chr((ord(char) + s - 97) % 26 + 97)
+                result += chr((ord(char) + key - 97) % 26 + 97)
      
         return result
         
 
-    def caesarDecrypt(self,text,s):
+    def caesarDecrypt(self,text,key):
         result = ""
      
         for i in range(len(text)):
@@ -32,11 +31,11 @@ class ClassicalCiphers:
      
             # Encrypt uppercase characters
             if (char.isupper()):
-                result += chr((ord(char) - s-65) % 26 + 65)
+                result += chr((ord(char) - key-65) % 26 + 65)
      
             # Encrypt lowercase characters
             else:
-                result += chr((ord(char) - s - 97) % 26 + 97)
+                result += chr((ord(char) - key - 97) % 26 + 97)
      
         return result
         
@@ -564,7 +563,7 @@ class ClassicalCiphers:
      
         return result
      
-        
+    
     def generateIC(self,coset):
         cosetIC = 0
         for c in coset:
@@ -664,7 +663,79 @@ class ClassicalCiphers:
         for coset in cosets:
             key += self.findMostCommonLetter(coset)
         return key
+
+    # Affine cipher
+    def affineEncrypt(self,text, key):
+        result = ""
+        for i in range(len(text)):
+            char = text[i]
+            if (char.isupper()):
+                result += chr((ord(char) + key - 65) % 26 + 65)
+            else:
+                result += chr((ord(char) + key - 97) % 26 + 97)
+        return result
         
+    def affineDecrypt(self,text, key):
+        result = ""
+        for i in range(len(text)):
+            char = text[i]
+            if (char.isupper()):
+                result += chr((ord(char) - key - 65) % 26 + 65)
+            else:
+                result += chr((ord(char) - key - 97) % 26 + 97)
+        return result
+    
+    #ADFGX Cipher
+    def adfgxEncrypt(self,plainText, key):
+        #generate the adfgx table
+        table = self.generateADFGXTable(key)
+        #generate the cipher text
+        cipherText = self.generateADFGXCipherText(plainText, table)
+        return cipherText
 
-
-
+    def generateADFGXTable(self,key):
+        #generate the adfgx table
+        table = [['a','d','f','g','x'],['a','d','f','g','x'],['a','d','f','g','x'],['a','d','f','g','x'],['a','d','f','g','x']]
+        #generate the key
+        key = self.generateKey(key)
+        #generate the table
+        table = self.generateTable(table, key)
+        return table
+        
+    def generateADFGXCipherText(self,plainText, table):
+        #generate the cipher text
+        cipherText = ""
+        for i in range(0, len(plainText)):
+            for j in range(0, 5):
+                for k in range(0, 5):
+                    if (plainText[i] == table[j][k]):
+                        cipherText += self.getLetter(j) + self.getLetter(k)
+        return cipherText
+        
+    def decryptADFGX(self,cipherText, key):
+        #generate the adfgx table
+        table = self.generateADFGXTable(key)
+        #generate the plain text
+        plainText = self.generateADFGXPlainText(cipherText, table)
+        return plainText
+        
+    def generateADFGXPlainText(self,cipherText, table):
+        #generate the plain text
+        plainText = ""
+        for i in range(0, len(cipherText), 2):
+            plainText += table[self.getNumber(cipherText[i])][self.getNumber(cipherText[i + 1])]
+        return plainText
+        
+    def getNumber(self,letter):
+        if (letter == 'a'):
+            return 0
+        elif (letter == 'd'):
+            return 1
+        elif (letter == 'f'):
+            return 2
+        elif (letter == 'g'):
+            return 3
+        elif (letter == 'x'):
+            return 4
+        else:
+            return -1
