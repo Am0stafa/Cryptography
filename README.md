@@ -4,7 +4,7 @@
 
 
 ##TODO:
-- review code
+- review code and explain each classical cipher
 - des decryption
 - aes encryption/decryption
 - Diffie-Hellman
