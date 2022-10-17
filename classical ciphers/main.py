@@ -1,4 +1,4 @@
 from ClassicalCiphers import ClassicalCiphers
 
 c = ClassicalCiphers()
-print(c.crackVigenere(c.vigenereEncrypt('abdomostafa', 'acf')))
+print(c.playfairEncrypt("hello", "world"))

@@ -68,7 +68,6 @@ class ClassicalCiphers:
         return result
     
     #! ------------------ Vigenere cipher ------------------
-    
     def vigenereEncrypt(self,text, key):
         result = ""
      
@@ -160,89 +159,35 @@ class ClassicalCiphers:
     #* #* #* #* #* #*
     #& #& #& #& #& #& 
     #^ #^ #^ #^ #^ #^
-    #! ------------------ Playfair cipher ------------------
+            
     
-    def playfairEncrypt(self,text, key):
-        result = ""
-     
-        # generate 5x5 key square
-        key = self.removeDuplicates(key)
-        key = self.formatKey(key)
-        keySquare = self.generateKeySquare(key)
-     
-        # traverse text
-        for i in range(0, len(text), 2):
-            # check if pair is valid
-            if (i < len(text) - 1 and text[i] == text[i + 1]):
-                text = text[:i + 1] + 'X' + text[i + 1:]
-     
-            # check if length is odd
-            if (len(text) % 2 != 0):
-                text += 'X'
-     
-            # get current digraph
-            digraph = text[i:i + 2]
-     
-            # get current digraph locations
-            loc = self.getDigraphLocation(digraph, keySquare)
-     
-            # same row
-            if (loc[0][0] == loc[1][0]):
-                # replace with letters to right respectively
-                result += keySquare[loc[0][0]][(loc[0][1] + 1) % 5]
-                result += keySquare[loc[1][0]][(loc[1][1] + 1) % 5]
-     
-            # same column
-            elif (loc[0][1] == loc[1][1]):
-                # replace with letters below respectively
-                result += keySquare[(loc[0][0] + 1) % 5][loc[0][1]]
-                result += keySquare[(loc[1][0] + 1) % 5][loc[1][1]]
-     
-            # rectangle
-            else:
-                # replace with letters on same row respectively but at the other pair of corners of the rectangle
-                result += keySquare[loc[0][0]][loc[1][1]]
-                result += keySquare[loc[1][0]][loc[0][1]]
-     
-        return result
-    # decrypts text with the Playfair cipher
-    def playfairDecrypt(self,text, key):
-        result = ""
-     
-        # generate 5x5 key square
-        key = self.removeDuplicates(key)
-        key = self.formatKey(key)
-        keySquare = self.generateKeySquare(key)
-     
-        # traverse text
-        for i in range(0, len(text), 2):
-            # get current digraph
-            digraph = text[i:i + 2]
-     
-            # get current digraph locations
-            loc = self.getDigraphLocation(digraph, keySquare)
-     
-            # same row
-            if (loc[0][0] == loc[1][0]):
-                # replace with letters to left respectively
-                result += keySquare[loc[0][0]][(loc[0][1] - 1) % 5]
-                result += keySquare[loc[1][0]][(loc[1][1] - 1) % 5]
-     
-            # same column
-            elif (loc[0][1] == loc[1][1]):
-                # replace with letters above respectively
-                result += keySquare[(loc[0][0] - 1) % 5][loc[0][1]]
-                result += keySquare[(loc[1][0] - 1) % 5][loc[1][1]]
-     
-            # rectangle
-            else:
-                # replace with letters on same row respectively but at the other pair of corners of the rectangle
-                result += keySquare[loc[0][0]][loc[1][1]]
-                result += keySquare[loc[1][0]][loc[0][1]]
-     
-        return result
+    #! ------------------ Hill cipher ------------------
     
-    # encrypts text with the Hill cipher
+    def generateKeyMatrix(self,key):
+        # generate key matrix for the key string
+        keyMatrix = []
+        k = 0
+        for i in range(0, 3):
+            keyMatrix.append([])
+            for j in range(0, 3):
+                keyMatrix[i].append(ord(key[k]) % 65)
+                k += 1
+        return keyMatrix
+    
+    def generateVect(self, text, i, vect):
+        # generate vector for the message
+        for j in range(0, 3):
+            vect[j] = ord(text[i + j]) % 65
+        return vect
+            
+    def findInverse(self, keyMatrix):
+        # find the inverse of the key matrix
+        k = 0
+        for i in range(0, 3):
+            for j in range(0, 3):
+                keyMatrix[i][j] = self.modInverse(keyMatrix[i][j], 26)
+        return keyMatrix
+    
     def hillEncrypt(self,text, key):
         result = ""
      
@@ -287,6 +232,7 @@ class ClassicalCiphers:
      
         return result
     # encrypts text with the Autokey cipher
+    
     def autokeyEncrypt(self,text, key):
         result = ""
      
@@ -610,42 +556,7 @@ class ClassicalCiphers:
         return result
      
 
-    # frequency analysis
-    def frequencyAnalysis(self,text):
-        # count the frequency of each letter
-        count = [0] * 26
-        for i in range(0, len(text)):
-            val = ord(text[i]) - ord('a')
-            if (val >= 0 and val <= 25):
-                count[val] = count[val] + 1
-        return count
-
-    # we can use the frequency analysis to find the most common letter in the text
-    
-    def findMostCommonLetter(self,text):
-        count = self.frequencyAnalysis(text)
-        max = 0
-        for i in range(0, len(count)):
-            if (count[i] > count[max]):
-                max = i
-        return chr(max + ord('a'))
-    
-    # we can use the frequency analysis to find the least common letter in the text
-    
-    def findLeastCommonLetter(self,text):
-        count = self.frequencyAnalysis(text)
-        min = 0
-        for i in range(0, len(count)):
-            if (count[i] < count[min]):
-                min = i
-        return chr(min + ord('a'))
-    #draws a histogram of the frequency of each letter in the text
-    def drawHistogram(self,text):
-        count = self.frequencyAnalysis(text)
-        plt.bar(range(len(count)), count, align='center')
-        plt.xticks(range(len(count)), list(string.ascii_lowercase))
-        plt.show()
-
+   
 
     # Affine cipher
     def affineEncrypt(self,text, key):
@@ -709,16 +620,39 @@ class ClassicalCiphers:
             plainText += table[self.getNumber(cipherText[i])][self.getNumber(cipherText[i + 1])]
         return plainText
         
+    @classmethod
     def getNumber(self,letter):
-        if (letter == 'a'):
-            return 0
-        elif (letter == 'd'):
-            return 1
-        elif (letter == 'f'):
-            return 2
-        elif (letter == 'g'):
-            return 3
-        elif (letter == 'x'):
-            return 4
-        else:
-            return -1
+        dec = {'a':0,'d':1,'f':2,'g':3,'x':4}
+        return dec.get(letter,-1)
+        
+            
+    #! ------------------ Frequency Analysis ------------------
+    def frequencyAnalysis(self,text):
+        count = [0] * 26
+        for i in range(0, len(text)):
+            val = ord(text[i]) - ord('a')
+            if (val >= 0 and val <= 25):
+                count[val] = count[val] + 1
+        return count
+    
+    def findMostCommonLetter(self,text):
+        count = self.frequencyAnalysis(text)
+        max = 0
+        for i in range(0, len(count)):
+            if (count[i] > count[max]):
+                max = i
+        return chr(max + ord('a'))
+    
+    def findLeastCommonLetter(self,text):
+        count = self.frequencyAnalysis(text)
+        min = 0
+        for i in range(0, len(count)):
+            if (count[i] < count[min]):
+                min = i
+        return chr(min + ord('a'))
+
+    def drawHistogram(self,text):
+        count = self.frequencyAnalysis(text)
+        plt.bar(range(len(count)), count, align='center')
+        plt.xticks(range(len(count)), list(string.ascii_lowercase))
+        plt.show()
