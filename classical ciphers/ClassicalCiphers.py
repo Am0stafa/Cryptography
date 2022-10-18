@@ -156,11 +156,7 @@ class ClassicalCiphers:
             key += self.findMostCommonLetter(coset)
         return key
     
-    #* #* #* #* #* #*
-    #& #& #& #& #& #& 
-    #^ #^ #^ #^ #^ #^
-            
-    
+
     #! ------------------ Hill cipher ------------------
     
     def generateKeyMatrix(self,key):
@@ -188,6 +184,8 @@ class ClassicalCiphers:
                 keyMatrix[i][j] = self.modInverse(keyMatrix[i][j], 26)
         return keyMatrix
     
+    
+    
     def hillEncrypt(self,text, key):
         result = ""
      
@@ -208,6 +206,7 @@ class ClassicalCiphers:
                 result += chr(c + 65)
      
         return result
+        
     # decrypts text with the Hill cipher
     def hillDecrypt(self,text, key):
         result = ""
@@ -231,8 +230,10 @@ class ClassicalCiphers:
                 result += chr(c + 65)
      
         return result
-    # encrypts text with the Autokey cipher
-    
+        
+
+     #! ------------------ Autokey cipher ------------------
+     
     def autokeyEncrypt(self,text, key):
         result = ""
      
@@ -251,6 +252,7 @@ class ClassicalCiphers:
         return result
         
     # decrypts text with the Autokey cipher
+    
     def autokeyDecrypt(self,text, key):
         result = ""
      
@@ -268,8 +270,8 @@ class ClassicalCiphers:
      
         return result
         
-        
-    # encrypts text with railfence cipher
+    #! ------------------ RailFence cipher ------------------
+    
     def railfenceEncrypt(self,text, key):
         result = ""
      
@@ -365,7 +367,9 @@ class ClassicalCiphers:
      
         return result
         
-    # encrypts text with row transposition cipher
+    
+    #! ------------------ Row transposition cipher ------------------
+    
     def rowTranspositionEncrypt(self,text, key):
         result = ""
      
@@ -460,7 +464,9 @@ class ClassicalCiphers:
                 row -= 1
      
         return result
-    # encrypts text with column transposition cipher
+        
+    #! ------------------ Column transposition cipher ------------------
+    
     def columnTranspositionEncrypt(self,text, key):
         result = ""
      
@@ -557,8 +563,8 @@ class ClassicalCiphers:
      
 
    
-
-    # Affine cipher
+    #! ------------------ Affine cipher ------------------
+        
     def affineEncrypt(self,text, key):
         result = ""
         for i in range(len(text)):
@@ -579,7 +585,8 @@ class ClassicalCiphers:
                 result += chr((ord(char) - key - 97) % 26 + 97)
         return result
     
-    #ADFGX Cipher
+    #! ------------------ ADFGX Cipher ------------------
+    
     def adfgxEncrypt(self,plainText, key):
         #generate the adfgx table
         table = self.generateADFGXTable(key)
