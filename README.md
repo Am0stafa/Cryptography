@@ -4,7 +4,7 @@
 
 
 ## TODO:
-- review code and explain each classical cipher
+- documentation
 - des decryption
 - aes encryption/decryption
 - hashing algorithm
