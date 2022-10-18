@@ -167,28 +167,28 @@ class DES:
         #step 3: expand R0 using E-bit
         expandedR0 =''
     
-        #divide right into 4
         rightOf4 = self.divideInto4(right)
     
         leftof4 = self.divideInto4(left)
     
-        new = self.Ebit(rightOf4)
+        rightAfterEbit = self.Ebit(rightOf4)
     
         #divide the key into 6
         keyOf6 = self.divideInto6(key)
     
+        #step 4: XOR the expandedR0 with the round key
+        R0xK = self.xOR(keyOf6,rightAfterEbit)
     
-        R0xK = self.xOR(keyOf6,new)
-    
-    
+        #step 5: shrink the result of step 4 using S-box
+        
         Sboxed = []
         #S-box step
         for s in range(len(R0xK)):
             Sboxed.append(self.Substitution(R0xK[s],self.Get_S_box(s+1)))
     
-        m = "".join(Sboxed)
+        afterSBox = "".join(Sboxed)
     
-        permutedR1 = self.permute(p_function,m)
+        permutedR1 = self.permute(p_function,afterSBox)
     
         permuted4 = self.divideInto4(permutedR1)
     
@@ -232,9 +232,7 @@ class DES:
                              [36, 4, 44, 12, 52, 20, 60, 28],
                              [35, 3, 43, 11, 51, 19, 59, 27],
                              [34, 2, 42, 10, 50, 18, 58, 26],
-                             [33, 1, 41, 9, 49, 17, 57, 25] ]
-    
-        # Write your implementation here
+                             [33, 1, 41, 9, 49, 17, 57, 25] ] 
     
         #step 1: initial permutation:
         permutedMessage = self.permute(initial_permutation,message)

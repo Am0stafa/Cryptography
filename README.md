@@ -5,6 +5,5 @@
 
 ## TODO:
 - documentation
-- des decryption
 - aes encryption/decryption
 - hashing algorithm
