@@ -23,7 +23,7 @@ class DES:
         self.reverseKeys = self.keys[::-1]
 
 
-    
+    @classmethod 
     def Get_S_box(self, number):  # This function takes the number of the S-box and returns the corresponding S-box
     
         # Every S-box is represented as a list of lists
@@ -72,7 +72,8 @@ class DES:
     
         }
         return switcher.get(number,-1)
-          
+    
+    @classmethod      
     def Substitution(self, value, s_box):  # This function takes a string of 6 bits and the desired s_box as inputs and returns a string of 4 bits after
         row = int(value[0] + value[5], 2)
         column = int(value[1] + value[2] + value[3] + value[4], 2)
@@ -80,7 +81,9 @@ class DES:
         while len(value) < 4:
             value = '0' + value
         return value
-           
+    
+    
+    @classmethod        
     def xOR(self, va1,va2):
         res = []
         collector =''
@@ -98,6 +101,8 @@ class DES:
         res.append(collector)
         return res
     
+    
+    @classmethod 
     def permute(self,permutation,message):
         permutedMessage = ''
         for x in range(len(permutation)):
@@ -105,6 +110,7 @@ class DES:
                 permutedMessage += message[permutation[x][y]-1] 
         return permutedMessage
       
+    @classmethod 
     def divideInto4(self,array):
         result  =[]
         collector = ''
@@ -117,7 +123,8 @@ class DES:
         result.pop(0)
         result.append(collector)
         return result
-   
+    
+    @classmethod 
     def divideInto6(self,array):
         result =[]
         collector = ''
@@ -132,13 +139,15 @@ class DES:
             zz+=array[-j]
         result.append(zz)
         return result
-        
+    
+    @classmethod     
     def Ebit(self,arrOf4):
         result = []
         for x in range(len(arrOf4)):
           result.append( arrOf4[(x-1)%len(arrOf4)][-1] + arrOf4[x] + arrOf4[(x+1)%len(arrOf4)][0] )
         return result
         
+    @classmethod  
     def leftAndRight(self,left,right,counter,decrypt):
     
         p_function = [[16, 7, 20, 21],
