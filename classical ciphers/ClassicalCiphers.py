@@ -38,6 +38,36 @@ class ClassicalCiphers:
         for i in range(26):
             print(i, self.caesarDecrypt(text, i))
     
+    #! ------------------ xOR ------------------
+    def decimalToBinary(self,n):
+        return bin(n).replace("0b", "")
+        
+    def binaryToDecimal(self,n):
+        return int(n,2)    
+    
+    def xORtwoBits(self,a,b):
+        # a="11011111101100110110011001011101000"
+        # b="11001011101100111000011100001100001"
+        y=int(a,2) ^ int(b,2)
+        return '{0:b}'.format(y)
+    
+    def xORencrypted(message,xORkey,ishex=False):
+        # encryptedMsg = "0e0b213f26041e480b26217f27342e175d0e070a3c5b103e2526217f27342e175d0e077e263451150104"
+        # key='myXORkey'
+        
+        if ishex:
+            message_ord = [o for o in bytes.fromhex(message)]
+        else:
+            message_ord = [ord(c) for c in message]
+        
+        xORkey_ord = [ord(c) for c in xORkey]
+        val = []
+        for i in range(len(message_ord)):
+            val.append(message_ord[i] ^ xORkey_ord[i%len(xORkey)])
+        val = "".join(chr(o) for o in val)
+        return val
+        
+    
         
     #! ------------------ monoalphabetic substitution ------------------
     
