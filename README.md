@@ -5,6 +5,6 @@
 
 ## TODO:
 - documentation
-- DES key creation algortim
+- DES key creation algorithm
 - AES encryption/decryption
 
