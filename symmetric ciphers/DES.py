@@ -1,7 +1,7 @@
 class DES:
-    def __init__(self,mode):
+    def __init__(self,key,mode):
         self.mode = mode
-        
+        self.key = key
         self.keys = [
             "000110110000001011101111111111000111000001110010",
             "011110011010111011011001110110111100100111100101",
@@ -22,7 +22,11 @@ class DES:
         ]
         self.reverseKeys = self.keys[::-1]
 
-
+    #generate round keys according to the keys for DES
+    def generateRoundKeys(self):
+        pass
+        
+    
 
     def Get_S_box(self, number):  # This function takes the number of the S-box and returns the corresponding S-box
     
