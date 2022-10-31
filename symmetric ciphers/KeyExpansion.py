@@ -1,3 +1,5 @@
+import numpy as np
+
 class AES_KeyExpansion:
 	def __init__(self,sbox,Rcon,key):
 		self.key = self.formatKey(key)
@@ -131,6 +133,9 @@ class AES_KeyExpansion:
 			
 		return self.returnKeys(words)
 
-
- 
+class DES_KeyExpansion:
+	def __init__(self,key,key_PBox):
+		self.key = key
+		self.key_PBox = key_PBox
+	
 	
