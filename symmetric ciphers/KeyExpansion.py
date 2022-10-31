@@ -3,23 +3,23 @@ class AES_KeyExpansion:
 		self.key = self.formatKey(key)
 		self.sbox = sbox
 		self.Rcon = Rcon
-		# self.options = {
-		# 	wordLength:{
-		# 		128:4,
-		# 		192:6,
-		# 		256:8
-		# 	},
-		# 	words:{
-		# 		128:44,
-		# 		192:78,
-		# 		256:112
-		# 	},
-		# 	numberOfKeys:{
-		# 		128:11,
-		# 		192:13,
-		# 		256:15
-		# 	}
-		# }
+		self.options = {
+			'wordLength':{
+				128:4,
+				192:6,
+				256:8
+			},
+			'words':{
+				128:44,
+				192:78,
+				256:112
+			},
+			'numberOfKeys':{
+				128:11,
+				192:13,
+				256:15
+			}
+		}
 	
 	#! function to convert string to hex
 	def str2hex(self,message):
