@@ -48,17 +48,45 @@ def keyschedule(key):
     key16 = np.array(key16)
     #convert numpy array into array
     keyMet = [list(map(int, key)) for key in key16]
+    for i in range(0,16):
+        keyMet[i] = "".join(map(str, keyMet[i]))
+    
+    
     return keyMet
+
+def toBinary(a):
+  l,m=[],[]
+  for i in a:
+    l.append(ord(i))
+  for i in l:
+    m.append(str(int(bin(i)[2:])))
+  return m
+
+def formateKey(key):
+    binaryKey = toBinary(key)
+    strKey = "".join(binaryKey)
+    if len(strKey) > 56:
+        strKey = strKey[:56]
+    keys = []
+    for i in strKey:
+        keys.append(i)
+    return keys    
 
 
 def main():
     
-    key = ['1', '1', '1', '1', '1', '1', '1', '0', '0', '1', '1', '1', '0', '0', '0', '1', '1', '1', '0', '0', '1', '1', '1', '0', '0', '0', '1', '1', '1', '0', '0', '0', '0', '1', '1', '1', '0', '0', '0', '0', '1', '1', '1', '0', '0', '0', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0']
-    print(len(key))
+    # key = ['1', '1', '1', '1', '1', '1', '1', '0', '0', '1', '1', '1', '0', '0', '0', '1', '1', '1', '0',   '0', '1', '1', '1', '0', '0', '0', '1', '1', '1', '0', '0', '0', '0', '1', '1', '1', '0', '0', '0', '0', '1', '1', '1', '0', '0', '0', '1', '1', '1', '0', '0', '0', '0', '0', '0', '0']
+        #^ length of the key must be 56
 
-
+    key = (formateKey("abdomostaaa"))
+    
+    # print(len('000110110000001011101111111111000111000001110010'))
+    # print(len('100110011110001011011000101010011001111111011111'))
+    
     key16 = keyschedule(key)
-    print(len(key16[1]))
+    
+    # print(key16)
+
 
   
 
