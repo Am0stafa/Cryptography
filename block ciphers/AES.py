@@ -59,21 +59,21 @@ class AES:
 	def stateMatrix(self,m):
 		str = (m).encode('utf-8')
 		hexa = str.hex()
-		stateMatrix =[[]]*4
+		stateMatrix =[['','','','']]*4
 		pair = []
 		two = 1
 		for i in range(0,16):
 			pair.append(hexa[i*2]+hexa[two])
 			two +=2
+			
 		operation = 0
 		for i in range(4):
 			for j in range(4):
-				if operation == 16:
-					pass
 				stateMatrix[j][i] = pair[operation]
 				operation += 1
-		
-		print(stateMatrix)
+
+		# print(pair)
+		# print(stateMatrix)
 		return stateMatrix
 		        
 	def addRoundKey(self,stateMatrix,key):
