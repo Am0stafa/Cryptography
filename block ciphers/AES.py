@@ -46,6 +46,14 @@ class AES:
             0x60, 0x51, 0x7f, 0xa9, 0x19, 0xb5, 0x4a, 0x0d, 0x2d, 0xe5, 0x7a, 0x9f, 0x93, 0xc9, 0x9c, 0xef,
             0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61,
             0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d]
+	# method to check if a cell length is 1 add 0 to the front in a two dimensional array
+	def check_cell(self, list):
+		for i in range(len(list)):
+			for j in range(len(list[i])):
+				if len(list[i][j]) == 1:
+					list[i][j] = "0" + list[i][j]
+		return list
+	
 	def shift_rows(self,s):
 	    s[0][1], s[1][1], s[2][1], s[3][1] = s[1][1], s[2][1], s[3][1], s[0][1]
 	    s[0][2], s[1][2], s[2][2], s[3][2] = s[2][2], s[3][2], s[0][2], s[1][2]
@@ -59,25 +67,23 @@ class AES:
 	def stateMatrix(self,m):
 		str = (m).encode('utf-8')
 		hexa = str.hex()
-		stateMatrix =[['','','','']]*4
+		stateMatrix = [[0 for x in range(4)] for y in range(4)]
 		pair = []
 		two = 1
 		for i in range(0,16):
 			pair.append(hexa[i*2]+hexa[two])
 			two +=2
 			
-		operation = 0
+		
+		# insert pairs array into 2d array colum wise
 		for i in range(4):
 			for j in range(4):
-				stateMatrix[j][i] = pair[operation]
-				operation += 1
+				stateMatrix[j][i] = pair[i*4+j]
 
-		# print(pair)
-		# print(stateMatrix)
 		return stateMatrix
 		        
 	def addRoundKey(self,stateMatrix,key):
-		newMatrix = [[]]*4
+		newMatrix = [[0 for x in range(4)] for y in range(4)]
 		for i in range(4):
 			for j in range(4):
 				newMatrix[i][j] = self.xor(stateMatrix[i][j],key[i][j])
@@ -91,11 +97,12 @@ class AES:
 		
 	def encryptedMsg(self,message):
 		stateMatrix = self.stateMatrix(message)
-		# initialTransformation = self.addRoundKey(stateMatrix,self.keys[0])
-		# newStateMatrix = initialTransformation
-		# print(newStateMatrix)
+		initialTransformation = self.addRoundKey(stateMatrix,self.keys[0])
+		newStateMatrix = self.check_cell(initialTransformation)
 		
 		
 		
 		for i in range(1,11):
 			pass
+		
+			
