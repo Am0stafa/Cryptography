@@ -71,12 +71,11 @@ class AES_KeyExpansion:
 		keys=[[]]*11
 		for i in range(len(words)):
 			if i % 4 == 0:
-				keys[int(i/4)] = words[i:i+4]
-				
+				keys[int(i/4)] = words[i:i+4]	
 		return keys
 		
 	def shift4Bits(self,word):
-		return word[1:]+word[:1]
+		return word[1:] + word[:1]
 	
 	def shift8Bits(self,word):
 		return word[2:]+word[:2]
@@ -111,11 +110,12 @@ class AES_KeyExpansion:
 			wordAtN_1 = words[i-1] #& this must change if we are at w0
 
 			if i % 4 == 0:
+				if i == 20:
+						print(wordAtN_1)
 				#^ rotate the word
-				wordAtN_1 = self.shift8Bits(wordAtN_1)
+				wordAtN_1 = self.shift4Bits(wordAtN_1)
 				
 				afterSbox = []
-				
 				
 				for j in wordAtN_1:
 					afterSbox.append(self.getSbox(j))
@@ -125,6 +125,8 @@ class AES_KeyExpansion:
 							
 					
 				wordAtN_1 = self.heXor(strSBox,rcon)
+				
+				
 
 			wordAtI = ''.join(wordAtI)
 			wordAtN_1 = ''.join(wordAtN_1)

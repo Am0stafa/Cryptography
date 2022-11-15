@@ -1,5 +1,6 @@
-# import AES_KeyExpansion
+
 from KeyExpansion import AES_KeyExpansion
+from keyEx import keyExpansion
 
 
 class AES:
@@ -27,7 +28,7 @@ class AES:
 		self.Rcon = [
 			0x00000000, 0x01000000, 0x02000000,0x04000000, 0x08000000, 0x10000000,0x20000000, 0x40000000,0x80000000,0x1b000000, 0x36000000
 		]
-		self.keys = AES_KeyExpansion(self.sbox,self.Rcon,self.key).keyExpansion()
+		self.keys = keyExpansion(self.key)
 		self.inv_s_box = [
             0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb,
             0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb,
@@ -54,6 +55,47 @@ class AES:
 	    s[0][1], s[1][1], s[2][1], s[3][1] = s[3][1], s[0][1], s[1][1], s[2][1]
 	    s[0][2], s[1][2], s[2][2], s[3][2] = s[2][2], s[3][2], s[0][2], s[1][2]
 	    s[0][3], s[1][3], s[2][3], s[3][3] = s[1][3], s[2][3], s[3][3], s[0][3]
-
+	
+	def stateMatrix(self,m):
+		str = (m).encode('utf-8')
+		hexa = str.hex()
+		stateMatrix =[[]]*4
+		pair = []
+		two = 1
+		for i in range(0,16):
+			pair.append(hexa[i*2]+hexa[two])
+			two +=2
+		operation = 0
+		for i in range(4):
+			for j in range(4):
+				if operation == 16:
+					pass
+				stateMatrix[j][i] = pair[operation]
+				operation += 1
+		
+		print(stateMatrix)
+		return stateMatrix
+		        
+	def addRoundKey(self,stateMatrix,key):
+		newMatrix = [[]]*4
+		for i in range(4):
+			for j in range(4):
+				newMatrix[i][j] = self.xor(stateMatrix[i][j],key[i][j])
+		
+		return newMatrix
+			
+		
+	# function to xor two hexadecimal numbers in a string formate
+	def xor(self,a, b):
+		return hex(int(a, 16) ^ int(b, 16))[2:]
+		
+	def encryptedMsg(self,message):
+		stateMatrix = self.stateMatrix(message)
+		# initialTransformation = self.addRoundKey(stateMatrix,self.keys[0])
+		# newStateMatrix = initialTransformation
+		# print(newStateMatrix)
 		
 		
+		
+		for i in range(1,11):
+			pass
