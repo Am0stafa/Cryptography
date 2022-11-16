@@ -23,13 +23,26 @@ Rcon = [0x00000000, 0x01000000, 0x02000000,
 		0x04000000, 0x08000000, 0x10000000, 
 		0x20000000, 0x40000000, 0x80000000, 
 		0x1b000000, 0x36000000]
-def returnKeys(words):
+		
+def transpose(l):
+	newMatrix = [[0 for x in range(4)] for y in range(4)]
+	
+	for i in range(len(l)):
+		for j in range(len(l[i])):
+			newMatrix[j][i] = l[i][j]
+	return newMatrix	
 
+def returnKeys(words):
+	# print(words[0])
 	keys=[[]]*11
 	for i in range(len(words)):
 		if i % 4 == 0:
 			keys[int(i/4)] = words[i:i+4]
+	for i in range(len(keys)):
+		keys[i]=transpose(keys[i])
+	
 	return keys
+
 
 #! function to convert string to hex
 def str2hex(message):
@@ -148,7 +161,7 @@ def SubWord(word):
 # 	key = ["54", "68", "61", "74", "73", "20", "6D", "79", "20", "4B", "75", "6E", "67", "20", "46", "75"]
 
 	#expand key
-	w = keyExpansion(key)
+	# w = keyExpansion(key)
 	
 # 	#display nicely
 # 	# print("Key provided: " + "".join(key))
