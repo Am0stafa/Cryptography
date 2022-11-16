@@ -120,7 +120,6 @@ class AES:
 		return afterSbox
 		
 	
-	
 	def mix_single_column(self,a):
 		for i in range(len(a)):
 			a[i] = (int(a[i],16))
@@ -132,7 +131,6 @@ class AES:
 		a[1] ^= t ^ xtime(a[1] ^ a[2])
 		a[2] ^= t ^ xtime(a[2] ^ a[3])
 		a[3] ^= t ^ xtime(a[3] ^ u)
-	
 	
 	def mix_columns(self,s):
 		for i in range(4):
