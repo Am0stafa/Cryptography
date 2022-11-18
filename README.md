@@ -5,6 +5,7 @@
 
 ## TODO:
 - documentation
+- aes decryption by inverse operations
 - difi hellamn
 - RSA
 
