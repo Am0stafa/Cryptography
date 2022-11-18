@@ -17,8 +17,9 @@ sys.path.append( mymodule_dir )
 
 from AES import AES
 
-AES('Thats my Kung Fu', 'v').encryptedMsg('Two One Nine Two')
-
+AES = AES('Thats my Kung Fu', 'v')
+dec = AES.decryptMessage(AES.encryptedMsg('Two One Nine Two'))
+print(dec)
 
 # [['61', '16', '62', '26'], ['64', '46', '6f', 'f6'], ['6d', 'd6', '6f', 'f7'], ['73', '33', '36', '66']]
 # [['61', '62', '64', '6f'], ['4d', '6f', '73', '74'], ['61', '66', '61', '47'], ['61', '6e', '6e', '61']]

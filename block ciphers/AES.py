@@ -2,6 +2,7 @@
 from KeyExpansion import AES_KeyExpansion
 from keyEx import keyExpansion
 import copy
+import codecs
 
 class AES:
 	def __init__(self,key,mode):
@@ -29,6 +30,7 @@ class AES:
 			0x00000000, 0x01000000, 0x02000000,0x04000000, 0x08000000, 0x10000000,0x20000000, 0x40000000,0x80000000,0x1b000000, 0x36000000
 		]
 		self.keys = keyExpansion(self.key)
+		self.decKeys = self.keys[::-1]
 		self.inv_s_box = [
 			0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb,
 			0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb,
@@ -148,26 +150,44 @@ class AES:
 	def encryptedMsg(self,message):
 		
 		stateMatrix = self.stateMatrix(message)
+
 		initialTransformation = self.addRoundKey(stateMatrix,self.keys[0])
 		newStateMatrix = self.check_cell(initialTransformation)
 		
 
 		round9 = self.recEncrypt(newStateMatrix,1)
 		
-		print(round9)
 		
 		subBytes10 = self.check_cell(self.SubstitutionBytes(round9))
 		shiftRows10 = self.check_cell(self.shift_rows(subBytes10))
-		roundKey10 = self.check_cell(self.addRoundKey(shiftRows10,self.keys[10]))
+		round10 = self.check_cell(self.addRoundKey(shiftRows10,self.keys[10]))
 		
-		return roundKey10
+
+		return round10
 		
-		# # for i in range(1,10):
-		# 	subBytes = self.SubstitutionBytes(newStateMatrix)
-		# 	print(subBytes)
-		# 	shiftRows = self.shift_rows(subBytes)
-		# 	mixCol = self.mixColumns(shiftRows)
-		# 	roundKey = self.addRoundKey(mixCol,self.keys[1])
+	def decryptMessage(self,stateMatrix):
+		initialTransformation = self.addRoundKey(stateMatrix,self.decKeys[0])
+		newStateMatrix = self.check_cell(initialTransformation)
+		
+
+		round9 = self.recDecrypt(newStateMatrix,1)
+		
+		
+		subBytes10 = self.check_cell(self.SubstitutionBytes(round9))
+		shiftRows10 = self.check_cell(self.shift_rows(subBytes10))
+		round10 = self.check_cell(self.addRoundKey(shiftRows10,self.decKeys[10]))
+		
+		word = ''
+		for i in range(len(round10)):
+			word += ''.join(round10[i])  # type: ignore
+				
+		print(word)
+		my_string = "ee04fc157067ffd2f592bbeb22c1220d"
+		my_string_bytes = bytes(my_string, encoding='latin-1')
+		
+		binary_string = codecs.decode(my_string_bytes, "hex")
+		print(str(binary_string, 'latin-1'))
+		return round10
 			
 		
 	def recEncrypt(self,state,i):
@@ -178,5 +198,15 @@ class AES:
 			shiftRows = self.check_cell(self.shift_rows(subBytes))
 			mixCol = self.check_cell(self.mixColumns(shiftRows))
 			roundKey = self.check_cell(self.addRoundKey(mixCol,self.keys[i]))
+			return self.recEncrypt(roundKey,i+1)
+	
+	def recDecrypt(self,state,i):
+		if i == 10:
+			return state
+		else:
+			subBytes = self.check_cell(self.SubstitutionBytes(state))
+			shiftRows = self.check_cell(self.shift_rows(subBytes))
+			mixCol = self.check_cell(self.mixColumns(shiftRows))
+			roundKey = self.check_cell(self.addRoundKey(mixCol,self.decKeys[i]))
 			return self.recEncrypt(roundKey,i+1)
 			
