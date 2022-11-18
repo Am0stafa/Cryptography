@@ -46,6 +46,8 @@ class AES:
 			0x60, 0x51, 0x7f, 0xa9, 0x19, 0xb5, 0x4a, 0x0d, 0x2d, 0xe5, 0x7a, 0x9f, 0x93, 0xc9, 0x9c, 0xef,
 			0xa0, 0xe0, 0x3b, 0x4d, 0xae, 0x2a, 0xf5, 0xb0, 0xc8, 0xeb, 0xbb, 0x3c, 0x83, 0x53, 0x99, 0x61,
 			0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d]
+			
+
 	
 	
 	# method to check if a cell length is 1 add 0 to the front in a two dimensional array
@@ -98,7 +100,6 @@ class AES:
 		return newMatrix
 				
 
-		
 	# function to xor two hexadecimal numbers in a string formate
 	def xor(self,a, b):
 		return hex(int(a, 16) ^ int(b, 16))[2:]
@@ -110,7 +111,6 @@ class AES:
 				a = stateMatrix[i][j][0]
 				if not a.isdigit():
 					a = ord(a) - 87
-					
 				b = stateMatrix[i][j][1]
 				if not b.isdigit():
 					b = ord(b) -87
@@ -120,11 +120,12 @@ class AES:
 		return afterSbox
 		
 	
-	def mix_single_column(self,a):
+	def mixSingleColumn(self,a):
+		xtime = lambda a: (((a << 1) ^ 0x1B) & 0xFF) if (a & 0x80) else (a << 1)
+		
 		for i in range(len(a)):
 			a[i] = (int(a[i],16))
-		
-		xtime = lambda a: (((a << 1) ^ 0x1B) & 0xFF) if (a & 0x80) else (a << 1)
+			
 		t = a[0] ^ a[1] ^ a[2] ^ a[3]
 		u = a[0]
 		a[0] ^= t ^ xtime(a[0] ^ a[1])
@@ -132,23 +133,50 @@ class AES:
 		a[2] ^= t ^ xtime(a[2] ^ a[3])
 		a[3] ^= t ^ xtime(a[3] ^ u)
 	
-	def mix_columns(self,s):
+	def mixColumns(self,s):
+		mix = copy.deepcopy(s)
 		for i in range(4):
-			self.mix_single_column(s[i])
-				
+			self.mixSingleColumn(mix[i])
+		
+		for i in range(len(mix)):
+			for j in range(len(mix[i])):
+				mix[i][j] = hex(mix[i][j])[2:]
+		
+			
+		return mix
 				
 	def encryptedMsg(self,message):
+		
 		stateMatrix = self.stateMatrix(message)
 		initialTransformation = self.addRoundKey(stateMatrix,self.keys[0])
 		newStateMatrix = self.check_cell(initialTransformation)
 		
-		subBytes = self.SubstitutionBytes(newStateMatrix)
-		shiftRows = self.shift_rows(subBytes)
-		# print(shiftRows)
-		self.mix_columns(shiftRows)
-		print(hex(shiftRows[0][0]))
+
+		round9 = self.recEncrypt(newStateMatrix,1)
 		
-		for i in range(1,11):
-			pass
+		print(round9)
 		
+		subBytes10 = self.check_cell(self.SubstitutionBytes(round9))
+		shiftRows10 = self.check_cell(self.shift_rows(subBytes10))
+		roundKey10 = self.check_cell(self.addRoundKey(shiftRows10,self.keys[10]))
+		
+		return roundKey10
+		
+		# # for i in range(1,10):
+		# 	subBytes = self.SubstitutionBytes(newStateMatrix)
+		# 	print(subBytes)
+		# 	shiftRows = self.shift_rows(subBytes)
+		# 	mixCol = self.mixColumns(shiftRows)
+		# 	roundKey = self.addRoundKey(mixCol,self.keys[1])
+			
+		
+	def recEncrypt(self,state,i):
+		if i == 10:
+			return state
+		else:
+			subBytes = self.check_cell(self.SubstitutionBytes(state))
+			shiftRows = self.check_cell(self.shift_rows(subBytes))
+			mixCol = self.check_cell(self.mixColumns(shiftRows))
+			roundKey = self.check_cell(self.addRoundKey(mixCol,self.keys[i]))
+			return self.recEncrypt(roundKey,i+1)
 			

@@ -49,7 +49,7 @@ def keyschedule(key):
     #convert numpy array into array
     keyMet = [list(map(int, key)) for key in key16]
     for i in range(0,16):
-        keyMet[i] = "".join(map(str, keyMet[i]))
+        keyMet[i] = "".join(map(str, keyMet[i]))  # type: ignore
     
     
     return keyMet
