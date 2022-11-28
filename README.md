@@ -5,6 +5,7 @@
 
 ## TODO:
 - documentation
-- difi hellamn
+- diffi hellamn
 - RSA
+- SSS
 
