@@ -16,8 +16,8 @@ sys.path.append( mymodule_dir )
 
 
 from AES import AES
-
-AES = AES('Thats my Kung Fu', 'v')
+key = b'\x00' * 16
+AES = AES(key, 'v')
 dec = AES.decryptMessage(AES.encryptedMsg('Two One Nine Two'))
 print(dec)
 
