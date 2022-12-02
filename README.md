@@ -4,7 +4,8 @@
 
 
 ## TODO:
-- documentation
+- documentation+pad v
+- modes of encryption
 - diffi hellamn
 - RSA
 - SSS
