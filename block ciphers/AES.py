@@ -45,6 +45,8 @@ r_con = (
 0xD4, 0xB3, 0x7D, 0xFA, 0xEF, 0xC5, 0x91, 0x39,
 )
 
+# xtime explained here: http://en.wikipedia.org/wiki/Rijndael_MixColumns
+# basically it's a multiply by 2 in GF(2^8) used in the MixColumns step
 xtime = lambda a: (((a << 1) ^ 0x1B) & 0xFF) if (a & 0x80) else (a << 1)
 
 class AES:
@@ -55,6 +57,7 @@ class AES:
             self.master_key = self.master_key.encode('utf-8') # encode to bytes
         self.n_rounds = AES.rounds_by_key_size[len(master_key)]
         self._key_matrices = AESKeyExpansion().Expand_key(master_key,self.n_rounds,s_box,r_con)
+        print(self.n_rounds,self._key_matrices)
         
     def bytes2matrix(self,text):
         #! loops through tha array of bytes and convert each charter to its asci value
@@ -78,9 +81,9 @@ class AES:
         s[0][3], s[1][3], s[2][3], s[3][3] = s[3][3], s[0][3], s[1][3], s[2][3]
             
     def mix_single_column(self,a):
-    
         t = a[0] ^ a[1] ^ a[2] ^ a[3]
         u = a[0]
+        # here we use the xtime function explained above
         a[0] ^= t ^ xtime(a[0] ^ a[1])
         a[1] ^= t ^ xtime(a[1] ^ a[2])
         a[2] ^= t ^ xtime(a[2] ^ a[3])

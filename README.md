@@ -4,9 +4,9 @@
 
 
 ## TODO:
-- documentation+pad v
-- modes of encryption
-- diffi hellamn
+- documentation + pad v
+- modes of encryption + refactor aes
+- Diffie Hellman
 - RSA
 - SSS
 
