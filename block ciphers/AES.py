@@ -55,9 +55,26 @@ class AES:
         self.master_key = master_key
         if isinstance(self.master_key, str):
             self.master_key = self.master_key.encode('utf-8') # encode to bytes
-        self.n_rounds = AES.rounds_by_key_size[len(master_key)]
-        self._key_matrices = AESKeyExpansion().Expand_key(master_key,self.n_rounds,s_box,r_con)
-        print(self.n_rounds,self._key_matrices)
+
+        if len(self.master_key) < 16:
+            pass
+        elif len(self.master_key) == 16:
+            self.n_rounds = AES.rounds_by_key_size[len(self.master_key)]
+        elif len(self.master_key) > 16 and len(self.master_key) < 24:
+            pass
+        elif len(self.master_key) == 24:
+            self.n_rounds = AES.rounds_by_key_size[len(self.master_key)]
+        elif len(self.master_key) > 24 and len(self.master_key) < 32:
+            pass
+        elif len(self.master_key) == 32:
+            self.n_rounds = AES.rounds_by_key_size[len(self.master_key)]
+        elif len(self.master_key) > 32:
+            pass
+        else:
+            ValueError('invalid key size')
+        
+        self._key_matrices = AESKeyExpansion().Expand_key(self.master_key,self.n_rounds,s_box,r_con)
+
         
     def bytes2matrix(self,text):
         #! loops through tha array of bytes and convert each charter to its asci value
