@@ -4,7 +4,7 @@
 
 
 ## TODO:
-- documentation + pad v
+- documentation
 - modes of encryption + refactor aes
 - Diffie Hellman
 - RSA
