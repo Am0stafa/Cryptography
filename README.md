@@ -6,7 +6,6 @@
 ## TODO:
 - documentation
 - modes of encryption + refactor aes
-- Diffie Hellman
 - RSA
 - SSS
 
