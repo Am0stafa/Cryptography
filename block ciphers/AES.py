@@ -46,8 +46,22 @@ r_con = (
 )
 
 # xtime explained here: http://en.wikipedia.org/wiki/Rijndael_MixColumns
-# basically it's a multiply by 2 in GF(2^8) used in the MixColumns step
-xtime = lambda a: (((a << 1) ^ 0x1B) & 0xFF) if (a & 0x80) else (a << 1)
+def xtime(a: uint8) -> uint8:
+    """Multiply by 2 in GF(2^8)
+    If the most significant bit of a is 1, then the polynomial is multiplied by
+    x before returning the result. Otherwise, the polynomial is multiplied by 1
+    before returning the result.
+    """
+    if (a & 0x80):
+        return (((a << 1) ^ 0x1B) & 0xFF)
+    else:
+        return (a << 1)
+
+def xtime(a: uint8) -> uint8:
+    if (a & 0x80):
+        return (((a << 1) ^ 0x1B) & 0xFF)
+    else:
+        return (a << 1)
 
 class AES:
     rounds_by_key_size = {16: 10, 24: 12, 32: 14}
@@ -76,17 +90,20 @@ class AES:
         self._key_matrices = AESKeyExpansion().Expand_key(self.master_key,self.n_rounds,s_box,r_con)
 
         
-    def bytes2matrix(self,text):
+    def bytes2matrix(self,text: bytes) -> List[List[int]]:
         #! loops through tha array of bytes and convert each charter to its asci value
+        #! then it is converted to a list of lists
         return [list(text[i:i+4]) for i in range(0, len(text), 4)]
 
-    def xor_bytes(self,a, b):
-        return bytes(i^j for i, j in zip(a, b))
+    # This function takes two byte strings of equal length and returns the XOR of them.
+    def xor_bytes(self, a: bytes, b: bytes) -> bytes:
+        return bytes([i^j for i, j in zip(a, b)])
     
-    def add_round_key(self,s, k):
+    def add_round_key(self, s: List[List[int]], k: List[List[int]]) -> None:
         for i in range(4):
             for j in range(4):
                 s[i][j] ^= k[i][j]
+                
     def sub_bytes(self,s):
         for i in range(4):
             for j in range(4):
@@ -97,10 +114,21 @@ class AES:
         s[0][2], s[1][2], s[2][2], s[3][2] = s[2][2], s[3][2], s[0][2], s[1][2]
         s[0][3], s[1][3], s[2][3], s[3][3] = s[3][3], s[0][3], s[1][3], s[2][3]
             
-    def mix_single_column(self,a):
+    # Mix a single column of four bytes
+    # This function is used in the mix_columns() function. It takes a list of 4 bytes
+    # and mixes them together.
+    def mix_single_column(self, a: List[int]) -> None:
         t = a[0] ^ a[1] ^ a[2] ^ a[3]
         u = a[0]
-        # here we use the xtime function explained above
+        a[0] ^= t ^ xtime(a[0] ^ a[1])
+        a[1] ^= t ^ xtime(a[1] ^ a[2])
+        a[2] ^= t ^ xtime(a[2] ^ a[3])
+        a[3] ^= t ^ xtime(a[3] ^ u)
+
+    def mix_single_column(self, a: List[int]) -> None:
+        # mix a single column of four bytes
+        t = a[0] ^ a[1] ^ a[2] ^ a[3]
+        u = a[0]
         a[0] ^= t ^ xtime(a[0] ^ a[1])
         a[1] ^= t ^ xtime(a[1] ^ a[2])
         a[2] ^= t ^ xtime(a[2] ^ a[3])
