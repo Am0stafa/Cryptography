@@ -5,7 +5,7 @@
 
 ## TODO:
 - documentation
-- modes of encryption + refactor aes
+- modes of encryption + refactor aes key
 - RSA
 - SSS
 
