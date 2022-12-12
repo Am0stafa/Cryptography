@@ -58,6 +58,7 @@ def encrypt(message, e, n):
 def decrypt(cipher, d, n):
     return pow(cipher, d) % n
 
+#TODO: error handling
 def convertToMessage(message):
     return long_to_bytes(message).decode("utf-8") 
     #finally convert from bytes to string
@@ -97,4 +98,5 @@ if __name__ == '__main__':
         output = convertToMessage(message)
         print("Message: ", output)
     
+
 
