@@ -1,6 +1,6 @@
 import random
-from math import sqrt
-from Crypto.Util.number import *
+import math
+import base64
 
 def generate_prime_numbers():
     p = random_prime(100,1000)
@@ -19,7 +19,7 @@ def is_prime(n):
     if n % 2 == 0 or n <= 1:
         return False
 
-    sqr = int(sqrt(n)) + 1
+    sqr = int(math.sqrt(n)) + 1
 
     for divisor in range(3, sqr, 2):
         if n % divisor == 0:
@@ -37,11 +37,13 @@ def calculate_totient(p, q):
 def calculate_n(p, q):
     return p * q
 
+
 def calculate_e(totient):
-    for e in range(2, totient):
+    while True:
+        e = random.randint(1, totient)
         if gcd(e, totient) == 1:
             return e
-
+    
 
 def calculate_d(e, totient):
     for d in range(1, totient):
@@ -52,20 +54,57 @@ def print_keys(e, d, n):
     print(f"Public key (e,n): ({e}, {n})")
     print(f"Private key (d,n): ({d}, {n})")
 
+# def encrypt(message, e, n):
+#     return pow(message, e, n)
+
+# def decrypt(cipher, d, n):
+#     return pow(cipher, d, n)
+
+
 def encrypt(message, e, n):
-    return pow(message, e) % n
+    # if the message if number encrypt it directly
+    if isinstance(message, int):
+        return pow(message, e, n)
+
+    # convert each character to ascii code and encrypt it
+    array = [pow(ord(c), e, n) for c in message]
+    # join the array separate by slash
+    encode = '/'.join(map(lambda x: str(x), array))
+    # base64 encode the string
+    cipher = base64.b64encode(encode.encode('ascii'))
+    return cipher
+    
+
 
 def decrypt(cipher, d, n):
-    return pow(cipher, d) % n
+    # if the cipher is number decrypt it directly
+    if isinstance(cipher, int):
+        return pow(cipher, d, n)
 
-#TODO: error handling
+    # base64 decode the string
+    base64_bytes = base64.b64decode(cipher)
+    base64_message = base64_bytes.decode('ascii')
+    # split the string by slash
+    array = base64_message.split('/')
+    # decrypt each character
+    decode = ''.join([chr(pow(int(char), d, n)) for char in array])
+    return decode
+
+
 def convertToMessage(message):
-    return long_to_bytes(message).decode("utf-8") 
-    #finally convert from bytes to string
+    length = math.ceil(message.bit_length() / 8)
+    return message.to_bytes(length, byteorder='little').decode()
     
 def convertToNumber(word):
-    return bytes_to_long(bytes(word, 'utf-8'))
-    #finally convert from string to bytes
+    return int.from_bytes(word.encode(), byteorder='little')
+
+# function that check if the input from the terminal is a number or not
+def is_number(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
 
 
 if __name__ == '__main__':
@@ -82,21 +121,18 @@ if __name__ == '__main__':
         print_keys(e, d, n)
     elif choice.strip().lower() == 'e':
         message = (input("Enter message: "))
-        if message.isnumeric():
+        if is_number(message):
             message = int(message)
-        else:
-            message = convertToNumber(message)
         e = int(input("Enter e: "))
         n = int(input("Enter n: "))
         cipher = encrypt(message, e, n)
         print("Cipher: ", cipher)
     elif choice.strip().lower() == 'd':
-        cipher = int(input("Enter Cipher: "))
+        cipher = (input("Enter Cipher: "))
+        if is_number(cipher):
+            cipher = int(cipher)
         d = int(input("Enter d: "))
         n = int(input("Enter n: "))
         message = decrypt(cipher, d, n)
-        output = convertToMessage(message)
-        print("Message: ", output)
+        print("Message: ", message)
     
-
-
