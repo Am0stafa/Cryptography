@@ -106,9 +106,15 @@ def is_number(s):
     except ValueError:
         return False
 
+def digital_signature(message, d, n):
+    return pow(message, d, n)
+
+def verify_signature(signature, e, n):
+    return pow(signature, e, n)
+
 
 if __name__ == '__main__':
-    choice = input("Do you want to generate keys? or encrypt/decrypt? (g/e/d): ")
+    choice = input("Do you want to generate keys? encrypt/decrypt? digital signature? or verify signature? (g/e/d/ds/vs): ")
     if choice.strip().lower() == 'g':
         p, q = generate_prime_numbers()
         print("Prime numbers: ", p, q)
@@ -119,6 +125,7 @@ if __name__ == '__main__':
         e = calculate_e(totient)
         d = calculate_d(e, totient)
         print_keys(e, d, n)
+
     elif choice.strip().lower() == 'e':
         message = (input("Enter message: "))
         if is_number(message):
@@ -127,6 +134,7 @@ if __name__ == '__main__':
         n = int(input("Enter n: "))
         cipher = encrypt(message, e, n)
         print("Cipher: ", cipher)
+
     elif choice.strip().lower() == 'd':
         cipher = (input("Enter Cipher: "))
         if is_number(cipher):
@@ -135,4 +143,24 @@ if __name__ == '__main__':
         n = int(input("Enter n: "))
         message = decrypt(cipher, d, n)
         print("Message: ", message)
+
+    elif choice.strip().lower() == 'ds':
+        message = (input("Enter message: "))
+        if is_number(message):
+            message = int(message)
+        d = int(input("Enter d: "))
+        n = int(input("Enter n: "))
+        signature = digital_signature(message, d, n)
+        print("Signature: ", signature)
+
+    elif choice.strip().lower() == 'vs':
+        signature = (input("Enter signature: "))
+        if is_number(signature):
+            signature = int(signature)
+        e = int(input("Enter e: "))
+        n = int(input("Enter n: "))
+        message = verify_signature(signature, e, n)
+        print("Message: ", message)
     
+    else:
+        print("Invalid choice")
