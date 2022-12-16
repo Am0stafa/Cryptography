@@ -107,10 +107,10 @@ def is_number(s):
         return False
 
 def digital_signature(message, d, n):
-    return pow(message, d, n)
+    return encrypt(message, d, n)
 
 def verify_signature(signature, e, n):
-    return pow(signature, e, n)
+    return decrypt(signature, e, n)
 
 
 if __name__ == '__main__':
