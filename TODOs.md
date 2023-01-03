@@ -4,4 +4,5 @@
 - 3DES
 - elgamal
 - SSS
+- (optional) ECC
 
