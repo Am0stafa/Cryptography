@@ -1,4 +1,4 @@
-# this is a class that will model an elliptic curve over a finite field with P elements
+# this is a class that will model an elliptic curve over a finite field with P elements where you can draw, add points and double points on the curve
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -11,7 +11,7 @@ class EllipticCurve:
         self.number_of_points = 0
         if self.is_valid():
             self.generate_points()
-            self.draw()
+            # self.draw()
         else:
             print("This is not a valid elliptic curve")
 
@@ -65,12 +65,21 @@ class EllipticCurve:
         y3 = (m*(x1 - x3) - y1) 
         return (x3 % self.p, y3 % self.p)
     
-    def multiply(self, p, n):
-        r = (None, None)
-        for i in range(n):
-            r = self.add(r, p)
-        return r
-    
+    def point_doubling(self, g, n):
+        # if n is 0, we return the point at infinity
+        if n == 0:
+            return (None, None)
+        # if n is 1, we return the point g
+        if n == 1:
+            return g
+        # if n is even, we return the point g + g
+        if n % 2 == 0:
+            return self.point_doubling(self.add(g, g), n // 2)
+        # if n is odd, we return the point g + g + g
+        else:
+            return self.add(g, self.point_doubling(self.add(g, g), (n - 1) // 2))
+
+
     def draw(self):
         # create a figure
         fig = plt.figure()
@@ -96,9 +105,9 @@ class EllipticCurve:
         plt.show()
 
 if __name__ == "__main__":
-    ec = EllipticCurve(4, 3, 23)
-
-
+    ec = EllipticCurve(4, 20, 29)
+    double = ec.point_doubling((1, 5), 77)
+    print(double)
 
 
 
