@@ -1,18 +1,6 @@
 # this is a class that will model an elliptic curve over a finite field with P elements
-import math
-import random
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Ellipse
-from matplotlib.patches import Circle
-from matplotlib.patches import Rectangle
-from matplotlib.patches import Polygon
-from matplotlib.patches import Arc
-from matplotlib.patches import FancyArrowPatch
-from matplotlib.patches import FancyBboxPatch
-from matplotlib.patches import FancyArrowPatch
-from matplotlib.patches import FancyBboxPatch
-from matplotlib.patches import FancyArrowPatch
 
 class EllipticCurve:
     def __init__(self, a, b, p):
@@ -46,7 +34,7 @@ class EllipticCurve:
 
     # check if its a valid elliptic curve by checking if the discriminant is not 0 4a^3 + 27b^2 != 0
     def is_valid(self):
-        if 4*self.a**3 + 27*self.b**2 != 0:
+        if (4*self.a**3 + 27*self.b**2)  != 0:
             return True
         else:
             return False
@@ -68,7 +56,6 @@ class EllipticCurve:
             return (None, None)
         # if the points are the same, then its the slope of the tangent line
         if x1 == x2:
-            # we use the multiplicative inverse function to find the inverse of 2y1
             # we want to reduce to modulo p to get them in the range of 0 to p - 1
             m = ((3*x1**2 + self.a) * self.multiplicative_inverse(2*y1)) % self.p
         else:
@@ -106,13 +93,10 @@ class EllipticCurve:
         plt.yticks(np.arange(0, self.p, 1))
         plt.tick_params(axis = "both", which = "major", labelsize = 8)
         plt.grid()
-        
-
-        
-        # show the plot
         plt.show()
 
-ec = EllipticCurve(317689081251325503476317476413827693272746955927, 79052896607878758718120572025718535432100651934, 785963102379428822376694789446897396207498568951)
+if __name__ == "__main__":
+    ec = EllipticCurve(4, 3, 23)
 
 
 
