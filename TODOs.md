@@ -1,8 +1,6 @@
 ## TODO:
 - documentation
-- modes of encryption + refactor aes,des key expansion
-- 3DES
 - elgamal
 - SSS
-- (optional) ECC
+- ECC diffie hellman,encryption,signing,elgamal
 

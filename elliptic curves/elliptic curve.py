@@ -79,7 +79,6 @@ class EllipticCurve:
         else:
             return self.add(g, self.point_doubling(self.add(g, g), (n - 1) // 2))
 
-
     def draw(self):
         # create a figure
         fig = plt.figure()
