@@ -1,4 +1,11 @@
-from AESExp import AESKeyExpansion
+from KeyExpansion import AESKeyExpansion
+import os
+import sys
+import inspect
+
+# i want to import modes file from ../modes of encryption/modes.py
+sys.path.insert(1, os.path.join(sys.path[0], '../modes of encryption'))
+from modes import cbc_encrypt,cbc_decrypt
 
 s_box = (
 0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
@@ -45,7 +52,6 @@ r_con = (
 0xD4, 0xB3, 0x7D, 0xFA, 0xEF, 0xC5, 0x91, 0x39,
 )
 
-# xtime explained here: http://en.wikipedia.org/wiki/Rijndael_MixColumns
 # xtime explained here: http://en.wikipedia.org/wiki/Rijndael_MixColumns
 def xtime(a):
     """Multiply by 2 in GF(2^8)
@@ -142,12 +148,13 @@ class AES:
             s[i][3] ^= v
     
         self.mix_columns(s)
+
     def encrypt_block(self, plaintext):
         #! Encrypts a single block of 16 byte long plaintext.        
         if isinstance(plaintext, str):
             plaintext = plaintext.encode('utf-8')
             
-        if len(plaintext) != 16:
+        if len(plaintext) > 16:
             plaintext = plaintext[:17]
             
         plain_state = self.bytes2matrix(plaintext)
@@ -188,3 +195,20 @@ class AES:
         self.add_round_key(cipher_state, self._key_matrices[0])
 
         return self.matrix2bytes(cipher_state)
+
+    def generateIv(self):
+        return os.urandom(16)
+
+    def encryptCBC(self, plaintext, iv=None):
+        if isinstance(plaintext, str):
+            plaintext = plaintext.encode('utf-8')
+        # generate a random iv if none is provided
+
+        return cbc_encrypt(self.encrypt_block,self._key_matrices,iv,plaintext)
+
+    def decryptCBC(self, ciphertext, iv=None):
+        if isinstance(ciphertext, str):
+            ciphertext = ciphertext.encode('utf-8')
+        # generate a random iv if none is provided
+
+        return cbc_decrypt(self.decrypt_block,self._key_matrices,iv,ciphertext)
