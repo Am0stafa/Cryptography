@@ -1,15 +1,6 @@
 # implementation of cryptographic algorithm
  <p align="center">
  <a href="#Appendix">Appendix</a> •
-  <a href="#key-features">Key Features</a> •
-  <a href="#demonstration">Demonstration</a> •
-  <a href="#how-to-use">How To Use</a> •
-  <a href="#api-usage">API Usage</a> •
-  <a href="#deployment">Deployment</a> •
-  <a href="#build-with">Build With</a> •
-  <a href="#to-do">To-do</a> •
-  <a href="#installation">Installation</a> • 
-  <a href="#future-updates">Future Updates</a> • 
   <a href="#Resorces">Resorces</a>
 </p>
 
@@ -51,3 +42,6 @@ Encryption algorithms converts plaintext data into cipher text that conceals the
 
 
 ## Resorces
+
+for the implemntation of AES:
+https://www.kavaliro.com/wp-content/uploads/2014/03/AES.pdf
