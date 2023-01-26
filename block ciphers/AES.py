@@ -72,19 +72,23 @@ class AES:
             self.master_key = self.master_key.encode('utf-8') # encode to bytes
 
         if len(self.master_key) < 16:
-            pass
+            self.master_key = self.master_key + b'\x00' * (16 - len(self.master_key))
+            self.n_rounds = AES.rounds_by_key_size[16]
         elif len(self.master_key) == 16:
             self.n_rounds = AES.rounds_by_key_size[len(self.master_key)]
         elif len(self.master_key) > 16 and len(self.master_key) < 24:
-            pass
+            self.master_key = self.master_key + b'\x00' * (24 - len(self.master_key))
+            self.n_rounds = AES.rounds_by_key_size[24]
         elif len(self.master_key) == 24:
             self.n_rounds = AES.rounds_by_key_size[len(self.master_key)]
         elif len(self.master_key) > 24 and len(self.master_key) < 32:
-            pass
+            self.master_key = self.master_key + b'\x00' * (32 - len(self.master_key))
+            self.n_rounds = AES.rounds_by_key_size[32]
         elif len(self.master_key) == 32:
             self.n_rounds = AES.rounds_by_key_size[len(self.master_key)]
         elif len(self.master_key) > 32:
-            pass
+            self.master_key = self.master_key[:32]
+            self.n_rounds = AES.rounds_by_key_size[32]
         else:
             ValueError('invalid key size')
         

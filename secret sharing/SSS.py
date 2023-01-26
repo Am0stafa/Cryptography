@@ -27,14 +27,12 @@ class SSS:
     def recover_secret(self, shares):
         # recover secret
         polynomial = lagrange([i[0] for i in shares], [i[1] for i in shares])
-        print(polynomial)
         return int(polynomial.coeffs[0])
 
 
 if __name__ == "__main__":
     sss = SSS(20,18,7)
     shares = sss.generate_shares(141592)
-    # print(shares)
+    print(shares)
     secret = sss.recover_secret(shares[:18])
     print((secret))
-

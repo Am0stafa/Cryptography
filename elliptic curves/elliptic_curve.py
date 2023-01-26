@@ -11,7 +11,6 @@ class EllipticCurve:
         self.number_of_points = 0
         if self.is_valid():
             self.generate_points()
-            # self.draw()
         else:
             print("This is not a valid elliptic curve")
 
@@ -104,9 +103,9 @@ class EllipticCurve:
         plt.show()
 
 if __name__ == "__main__":
-    ec = EllipticCurve(4, 20, 29)
+    ec = EllipticCurve(90, 95, 80)
     double = ec.point_doubling((1, 5), 77)
-    print(double)
+    ec.draw()
 
 
 
