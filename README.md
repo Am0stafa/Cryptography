@@ -1,7 +1,9 @@
 # implementation of cryptographic algorithm
  <p align="center">
- <a href="#Appendix">Appendix</a> •
-  <a href="#Resorces">Resorces</a>
+  <a href="#Appendix">Appendix</a> •
+  <a href="#Resorces">Resorces</a> •
+  <a href="#how-to-use">How to use</a> •
+  
 </p>
 
 
@@ -39,6 +41,10 @@ Encryption algorithms converts plaintext data into cipher text that conceals the
 **Signatures** combine asymmetric cryptography (that is, using a public/private key pair) with hashing to provide integrity and authenticity by encrypting the hash of the message with the private key. However, unlike MACs, signatures also provide non-repudiation property as the private key should remain unique to the data signer.
 
 **Key Derivation Functions:** (KDFs) derive secret keys from a secret value (such as a password) and are used to turn keys into other formats or to increase their length. KDFs are similar to hashing functions but have other uses as well (for example, they are used as components of multi-party key-agreement protocols). While both hashing functions and KDFs must be difficult to reverse, KDFs have the added requirement that the keys they produce must have a level of randomness.
+
+## How to use
+
+
 
 
 ## Resorces
