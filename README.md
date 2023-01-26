@@ -43,5 +43,13 @@ Encryption algorithms converts plaintext data into cipher text that conceals the
 
 ## Resorces
 
-for the implemntation of AES:
+For the implemntation of AES:
 https://www.kavaliro.com/wp-content/uploads/2014/03/AES.pdf
+
+For implementation of DES:
+https://page.math.tu-berlin.de/~kant/teaching/hess/krypto-ws2006/des.htm
+
+For implementation of SSS:
+https://blog.boot.dev/cryptography/shamirs-secret-sharing/
+
+
