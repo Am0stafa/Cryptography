@@ -113,7 +113,7 @@ def verify_signature(signature, e, n):
     return decrypt(signature, e, n)
 
 
-if __name__ == '__main__':
+def runRSA():
     choice = input("Do you want to generate keys? encrypt/decrypt? digital signature? or verify signature? (g/e/d/ds/vs): ")
     if choice.strip().lower() == 'g':
         p, q = generate_prime_numbers()

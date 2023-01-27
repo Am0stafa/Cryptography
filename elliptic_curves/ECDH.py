@@ -22,7 +22,7 @@ class EllipticCurveDH:
         return self.shared_key
     
 
-if __name__ == "__main__":
+if __name__ == "__main__": # to be changed to runECDH()
     a = 1
     b = 6
     p = 23

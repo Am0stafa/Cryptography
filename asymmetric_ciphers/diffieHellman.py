@@ -47,7 +47,7 @@ def calculateEncryptionKey(primeNumber, bobsPublicKey, privateKey):
     encryptionKey = (bobsPublicKey ** privateKey) % primeNumber
     return encryptionKey
 
-if __name__ == "__main__":
+def runDH():
     choice = input("Do you want to generate every thing and just provide bobs public key? (y/N): ")
     if choice.lower() == "y":
         p = getAPrimeNumber()

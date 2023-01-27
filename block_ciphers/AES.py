@@ -1,9 +1,6 @@
 from KeyExpansion import AESKeyExpansion
 import os
 import sys
-import inspect
-
-# i want to import modes file from ../modes of encryption/modes.py
 sys.path.insert(1, os.path.join(sys.path[0], '../modes of encryption'))
 from modes import cbc_encrypt,cbc_decrypt
 

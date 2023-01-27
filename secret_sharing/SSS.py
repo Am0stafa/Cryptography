@@ -31,7 +31,7 @@ class SSS:
 
 
 if __name__ == "__main__":
-    sss = SSS(20,18,7)
+    sss = SSS(5,3,7)
     shares = sss.generate_shares(141592)
     print(shares)
     secret = sss.recover_secret(shares[:18])
