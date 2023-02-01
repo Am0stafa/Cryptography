@@ -58,4 +58,5 @@ https://page.math.tu-berlin.de/~kant/teaching/hess/krypto-ws2006/des.htm
 For implementation of SSS:
 https://blog.boot.dev/cryptography/shamirs-secret-sharing/
 
-
+For implementation of ECDH:
+https://medium.com/asecuritysite-when-bob-met-alice/ecdh-using-python-and-hazmat-39d5b94b2e15
