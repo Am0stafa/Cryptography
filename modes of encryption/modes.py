@@ -41,3 +41,57 @@ def cbc_decrypt(algo,key, iv, ciphertext):
         plaintext += xor(algo(block), prev)
         prev = block
     return unpad(plaintext)
+
+
+def ctr_encrypt(algo, key, nonce, plaintext):
+    blocks = [plaintext[i:i+16] for i in range(0, len(plaintext), 16)]
+    ciphertext = b''
+    counter = 0
+    for block in blocks:
+        keystream = algo(nonce + counter.to_bytes(8, 'little'))
+        ciphertext += xor(block, keystream)
+        counter += 1
+    return ciphertext
+
+def ctr_decrypt(algo, key, nonce, ciphertext):
+    return ctr_encrypt(algo, key, nonce, ciphertext)
+
+def ecb_encrypt(algo, key, plaintext):
+    plaintext = pad(plaintext)
+    blocks = [plaintext[i:i+16] for i in range(0, len(plaintext), 16)]
+    ciphertext = b''
+    for block in blocks:
+        ciphertext += algo(block)
+    return ciphertext
+
+def ecb_decrypt(algo, key, ciphertext):
+    blocks = [ciphertext[i:i+16] for i in range(0, len(ciphertext), 16)]
+    plaintext = b''
+    for block in blocks:
+        plaintext += algo(block)
+    return unpad(plaintext)
+
+def ofb_encrypt(algo, key, iv, plaintext):
+    blocks = [plaintext[i:i+16] for i in range(0, len(plaintext), 16)]
+    ciphertext = b''
+    prev = iv
+    for block in blocks:
+        prev = algo(prev)
+        ciphertext += xor(block, prev)
+    return ciphertext
+
+def ofb_decrypt(algo, key, iv, ciphertext):
+    return ofb_encrypt(algo, key, iv, ciphertext)
+
+def cfb_encrypt(algo, key, iv, plaintext):
+    blocks = [plaintext[i:i+16] for i in range(0, len(plaintext), 16)]
+    ciphertext = b''
+    prev = iv
+    for block in blocks:
+        prev = algo(prev)
+        ciphertext += xor(block, prev)
+    return ciphertext
+
+def cfb_decrypt(algo, key, iv, ciphertext):
+    return cfb_encrypt(algo, key, iv, ciphertext)
+

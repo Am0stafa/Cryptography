@@ -2,7 +2,7 @@ from KeyExpansion import AESKeyExpansion
 import os
 import sys
 sys.path.insert(1, os.path.join(sys.path[0], '../modes of encryption'))
-from modes import cbc_encrypt,cbc_decrypt
+from modes import cbc_encrypt,cbc_decrypt,ctr_encrypt,ctr_decrypt,ecb_encrypt,ecb_decrypt,ofb_encrypt,ofb_decrypt,cfb_encrypt,cfb_decrypt
 
 s_box = (
     0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76,
@@ -209,9 +209,58 @@ class AES:
             print(iv)
         return cbc_encrypt(self.encrypt_block,self._key_matrices,iv[:16],plaintext)
 
-    def decryptCBC(self, ciphertext, iv=None):
+    def decryptCBC(self, ciphertext, iv):
         if isinstance(ciphertext, str):
             ciphertext = ciphertext.encode('utf-8')
-        # generate a random iv if none is provided
-
+        
         return cbc_decrypt(self.decrypt_block,self._key_matrices,iv[:16],ciphertext)
+
+    def encryptCTR(self, plaintext, iv=None):
+        if isinstance(plaintext, str):
+            plaintext = plaintext.encode('utf-8')
+        # generate a random iv if none is provided
+        if iv is None:
+            iv = self.generateIv()
+        return ctr_encrypt(self.encrypt_block,self._key_matrices,iv[:16],plaintext)
+
+    def decryptCTR(self, ciphertext, iv):
+        if isinstance(ciphertext, str):
+            ciphertext = ciphertext.encode('utf-8')
+
+        return ctr_decrypt(self.decrypt_block,self._key_matrices,iv[:16],ciphertext)
+
+    def encryptECB(self, plaintext):
+        if isinstance(plaintext, str):
+            plaintext = plaintext.encode('utf-8')
+        return ecb_encrypt(self.encrypt_block,self._key_matrices,plaintext)
+
+    def decryptECB(self, ciphertext):
+        if isinstance(ciphertext, str):
+            ciphertext = ciphertext.encode('utf-8')
+        return ecb_decrypt(self.decrypt_block,self._key_matrices,ciphertext)
+        
+    def encryptOFB(self, plaintext, iv=None):
+        if isinstance(plaintext, str):
+            plaintext = plaintext.encode('utf-8')
+        # generate a random iv if none is provided
+        if iv is None:
+            iv = self.generateIv()
+        return ofb_encrypt(self.encrypt_block,self._key_matrices,iv[:16],plaintext)
+
+    def decryptOFB(self, ciphertext, iv):
+        if isinstance(ciphertext, str):
+            ciphertext = ciphertext.encode('utf-8')
+        return ofb_decrypt(self.decrypt_block,self._key_matrices,iv[:16],ciphertext)
+
+    def encryptCFB(self, plaintext, iv=None):
+        if isinstance(plaintext, str):
+            plaintext = plaintext.encode('utf-8')
+        # generate a random iv if none is provided
+        if iv is None:
+            iv = self.generateIv()
+        return cfb_encrypt(self.encrypt_block,self._key_matrices,iv[:16],plaintext)
+
+    def decryptCFB(self, ciphertext, iv):
+        if isinstance(ciphertext, str):
+            ciphertext = ciphertext.encode('utf-8')
+        return cfb_decrypt(self.decrypt_block,self._key_matrices,iv[:16],ciphertext)
