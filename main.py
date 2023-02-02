@@ -53,7 +53,68 @@ def Encrypt():
                 ),
     ]
     enc = inquirer.prompt(enc)["encryption"]
-    print(enc)
+
+    if enc == "Classical":
+        clearTerminal()
+        Classical()
+    elif enc == "Block Cipher":
+        clearTerminal()
+        BlockCipher()
+    elif enc == "Asymmetric Cipher":
+        clearTerminal()
+        AsymmetricCipher()
+    elif enc == "Elliptic Curve":
+        clearTerminal()
+        EllipticCurve()
+    else:
+        print("Error")
+
+def Classical():
+    classical = [
+    inquirer.List('classical',
+                    message="Type of Classical Encryption?",
+                    choices=['Caesar','Vigenere','Playfair','Hill'],
+                ),
+    ]
+    classical = inquirer.prompt(classical)["classical"]
+    print(classical)
+
+def BlockCipher():
+    blockCipher = [
+    inquirer.List('blockCipher',
+                    message="Type of Block Cipher Encryption?",
+                    choices=['AES','DES'],
+                ),
+    ]
+    blockCipher = inquirer.prompt(blockCipher)["blockCipher"]
+    
+    if blockCipher == "AES":
+        clearTerminal()
+        AES()
+    elif blockCipher == "DES":
+        clearTerminal()
+        DES()
+
+def AsymmetricCipher():
+    asymmetricCipher = [
+    inquirer.List('asymmetricCipher',
+                    message="Type of Asymmetric Cipher Encryption?",
+                    choices=['RSA'],
+                ),
+    ]
+    asymmetricCipher = inquirer.prompt(asymmetricCipher)["asymmetricCipher"]
+    print(asymmetricCipher)
+
+def EllipticCurve():
+    ellipticCurve = [
+    inquirer.List('ellipticCurve',
+                    message="Type of Elliptic Curve Encryption?",
+                    choices=['ECDH'],
+                ),
+    ]
+    ellipticCurve = inquirer.prompt(ellipticCurve)["ellipticCurve"]
+    print(ellipticCurve)
+
 
 def Decrypt():
     dec = [
@@ -105,6 +166,18 @@ def SecretSharing():
     secretType = inquirer.prompt(secretType)["secret"]
     print(secretType)
 
+def AES():
+    aes = [
+    inquirer.List('aes',
+                    message="Type of AES?",
+                    choices=['ECB','CBC','CTR','CFB','OFB'],
+                ),
+    ]
+    aes = inquirer.prompt(aes)["aes"]
+    print(aes)
+
+def DES():
+    pass
 
 questions = [
   inquirer.List('type',
