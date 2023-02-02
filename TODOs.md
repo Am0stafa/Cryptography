@@ -1,5 +1,5 @@
 ## TODO:
 - documentation
 - elgamal
-- ECC diffie hellman, encryption ,signing ,elgamal
+- ECC diffie hellman,signing ,elgamal
 
