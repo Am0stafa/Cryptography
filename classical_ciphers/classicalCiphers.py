@@ -124,7 +124,7 @@ class ClassicalCiphers:
      
         return result 
         
-    @classmethod
+    # @classmethod
     def generateIC(self,coset):
         cosetIC = 0
         for c in coset:
@@ -144,7 +144,7 @@ class ClassicalCiphers:
         cosetIC = cosetIC / len(coset)
         return cosetIC
     
-    @classmethod
+    # @classmethod
     def cosets(self,string,numb):
         chars = []
         chars[:] = string
@@ -657,7 +657,7 @@ class ClassicalCiphers:
             plainText += table[self.getNumber(cipherText[i])][self.getNumber(cipherText[i + 1])]
         return plainText
         
-    @classmethod
+    # @classmethod
     def getNumber(self,letter):
         dec = {'a':0,'d':1,'f':2,'g':3,'x':4}
         return dec.get(letter,-1)

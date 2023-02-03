@@ -3,13 +3,125 @@ import rich as rich
 from rich.progress import track
 import time
 import inquirer
+from classical_ciphers.classicalCiphers import ClassicalCiphers
 # from block_ciphers.AES import AES
 # from block_ciphers.DES import DES
-# from asymmetric_ciphers.RSA import runRSA
-# from asymmetric_ciphers.diffieHellman import runDH
+from asymmetric_ciphers.RSA import runRSA
+from asymmetric_ciphers.diffieHellman import runDH
 # from elliptic_curves.elliptic_curve import EllipticCurve
 # from elliptic_curves.ECDH import runECDH
-# from secret_sharing.SSS import SSS
+from secret_sharing.SSS import runSSS
+
+#! algorithms
+def caesar(message, key):
+    if key == "":
+        key = 3
+    try:
+        key = int(key)
+    except:
+        listOfStr = [ord(i) for i in key]
+        key = sum(listOfStr)
+
+    c = ClassicalCiphers()
+    return c.caesarEncrypt(message, key)
+
+def decryptCaesar(message, key):
+    if key == "":
+        key = 3
+    try:
+        key = int(key)
+    except:
+        listOfStr = [ord(i) for i in key]
+        key = sum(listOfStr)
+
+    c = ClassicalCiphers()
+    return c.caesarDecrypt(message, key)
+
+def vigenere(message, key):
+    c = ClassicalCiphers()
+    return c.vigenereEncrypt(message, key)
+
+def decryptVigenere(message, key):
+    c = ClassicalCiphers()
+    return c.vigenereDecrypt(message, key)
+
+def hill(message, key):
+    c = ClassicalCiphers()
+    return c.hillEncrypt(message, key)
+
+def decryptHill(message, key):
+    c = ClassicalCiphers()
+    return c.hillDecrypt(message, key)
+
+def xor(message, key):
+    c = ClassicalCiphers()
+    return c.xorEncrypt(message, key)
+
+def decryptXor(message, key):
+    c = ClassicalCiphers()
+    return c.xorDecrypt(message, key)
+
+def monoalphabetic(message, key):
+    c = ClassicalCiphers()
+    return c.monoalphabeticEncrypt(message, key)
+
+def decryptMonoalphabetic(message, key):
+    c = ClassicalCiphers()
+    return c.monoalphabeticDecrypt(message, key)
+
+def autokey(message, key):
+    c = ClassicalCiphers()
+    return c.autokeyEncrypt(message, key)
+
+def decryptAutokey(message, key):
+    c = ClassicalCiphers()
+    return c.autokeyDecrypt(message, key)
+
+def railfence(message, key):
+    c = ClassicalCiphers()
+    return c.railfenceEncrypt(message, key)
+
+def decryptRailfence(message, key):
+    c = ClassicalCiphers()
+    return c.railfenceDecrypt(message, key)
+
+def rowTransposition(message, key):
+    c = ClassicalCiphers()
+    return c.rowTranspositionEncrypt(message, key)
+
+def decryptRowTransposition(message, key):
+    c = ClassicalCiphers()
+    return c.rowTranspositionDecrypt(message, key)
+
+def columnTransposition(message, key):
+    c = ClassicalCiphers()
+    return c.columnTranspositionEncrypt(message, key)
+
+def decryptColumnTransposition(message, key):
+    c = ClassicalCiphers()
+    return c.columnTranspositionDecrypt(message, key)
+
+def affine(message, key):
+    c = ClassicalCiphers()
+    return c.affineEncrypt(message, key)
+
+def decryptAffine(message, key):
+    c = ClassicalCiphers()
+    return c.affineDecrypt(message, key)
+
+def adfgx(message, key):
+    c = ClassicalCiphers()
+    return c.adfgxEncrypt(message, key)
+
+def decryptAdfgx(message, key):
+    c = ClassicalCiphers()
+    return c.adfgxDecrypt(message, key)
+
+
+
+
+#! end of algorithms
+
 
 
 art_1=text2art("Crypto")
@@ -24,18 +136,6 @@ def progressBar(howLong):
 
 progressBar(2)
 
-def fromByteToStr(byte):
-    try:
-        return byte.decode('utf-8')
-    except:
-        return byte.decode('utf-8', 'ignore')
-
-def fromStrToByte(str):
-    try:
-        return str.encode('utf-8')
-    except:
-        return str.encode('utf-8', 'ignore')
-
 def exit():
     print("Exiting...")
     progressBar(2)
@@ -43,7 +143,6 @@ def exit():
 
 def clearTerminal():
     print("\033c")
-
 
 def Encrypt():
     enc = [
@@ -69,15 +168,107 @@ def Encrypt():
     else:
         print("Error")
 
-def Classical():
+def Classical(decrypt=False):
     classical = [
     inquirer.List('classical',
-                    message="Type of Classical Encryption?",
-                    choices=['Caesar','Vigenere','Playfair','Hill'],
+                    message="Type of Classical Cipher?",
+                    choices=['Caesar','Vigenere','Hill','XOR','Monoalphabetic','Autokey','RailFence','Row transposition','Column transposition','Affine','ADFGX']
                 ),
     ]
     classical = inquirer.prompt(classical)["classical"]
-    print(classical)
+    message, key = messageAndKey()
+    if classical == "Caesar":
+        clearTerminal()
+        if decrypt:
+            rich.print("Plain Text: [bold blue]" + decryptCaesar(message, key) + "[/bold blue]")
+        else:
+            rich.print("Cipher Text: [bold red]" + caesar(message, key) + "[/bold red]")
+
+    elif classical == "Vigenere":
+        clearTerminal()
+        if decrypt:
+            rich.print("Plain Text: [bold blue]" + decryptVigenere(message, key) + "[/bold blue]")
+        else:
+            rich.print("Cipher Text: [bold red]" + vigenere(message, key) + "[/bold red]")
+
+    elif classical == "Hill":
+        clearTerminal()
+        if decrypt:
+            rich.print("Plain Text: [bold blue]" + decryptHill(message, key) + "[/bold blue]")
+        else:
+            rich.print("Cipher Text: [bold red]" + hill(message, key) + "[/bold red]")
+
+    elif classical == "XOR":
+        clearTerminal()
+        if decrypt:
+            rich.print("Plain Text: [bold blue]" + decryptXor(message, key) + "[/bold blue]")
+        else:
+            rich.print("Cipher Text: [bold red]" + xor(message, key) + "[/bold red]")
+
+    elif classical == "Monoalphabetic":
+        clearTerminal()
+        if decrypt:
+            rich.print("Plain Text: [bold blue]" + decryptMonoalphabetic(message, key) + "[/bold blue]")
+        else:
+            rich.print("Cipher Text: [bold red]" + monoalphabetic(message, key) + "[/bold red]")
+
+    elif classical == "Autokey":
+        clearTerminal()
+        if decrypt:
+            rich.print("Plain Text: [bold blue]" + decryptAutokey(message, key) + "[/bold blue]")
+        else:
+            rich.print("Cipher Text: [bold red]" + autokey(message, key) + "[/bold red]")
+
+    elif classical == "RailFence":
+        clearTerminal()
+        if decrypt:
+            rich.print("Plain Text: [bold blue]" + decryptRailfence(message, key) + "[/bold blue]")
+        else:
+            rich.print("Cipher Text: [bold red]" + railfence(message, key) + "[/bold red]")
+
+    elif classical == "Row transposition":
+        clearTerminal()
+        if decrypt:
+            rich.print("Plain Text: [bold blue]" + decryptRowTransposition(message, key) + "[/bold blue]")
+        else:
+            rich.print("Cipher Text: [bold red]" + rowTransposition(message, key) + "[/bold red]")
+    
+    elif classical == "Column transposition":
+        clearTerminal()
+        if decrypt:
+            rich.print("Plain Text: [bold blue]" + decryptColumnTransposition(message, key) + "[/bold blue]")
+        else:
+            rich.print("Cipher Text: [bold red]" + columnTransposition(message, key) + "[/bold red]")
+
+    elif classical == "Affine":
+        clearTerminal()
+        if decrypt:
+            rich.print("Plain Text: [bold blue]" + decryptAffine(message, key) + "[/bold blue]")
+        else:
+            rich.print("Cipher Text: [bold red]" + affine(message, key) + "[/bold red]")
+
+    elif classical == "ADFGX":
+        clearTerminal()
+        if decrypt:
+            rich.print("Plain Text: [bold blue]" + decryptAdfgx(message, key) + "[/bold blue]")
+        else:
+            rich.print("Cipher Text: [bold red]" + adfgx(message, key) + "[/bold red]")
+    else:
+        print("Error")
+
+def Decrypt():
+    dec = [
+    inquirer.List('decryption',
+                    message="Type of Decryption?",
+                    choices=['Classical','Block Cipher','Asymmetric Cipher','Elliptic Curve'],
+                ),
+    ]
+    dec = inquirer.prompt(dec)["decryption"]
+    if dec == "Classical":
+        clearTerminal()
+        Classical(decrypt=True)
+
+
 
 def BlockCipher():
     blockCipher = [
@@ -90,10 +281,10 @@ def BlockCipher():
     
     if blockCipher == "AES":
         clearTerminal()
-        AES()
+        AESChoice()
     elif blockCipher == "DES":
         clearTerminal()
-        DES()
+        DESChoice()
 
 def AsymmetricCipher():
     asymmetricCipher = [
@@ -103,7 +294,9 @@ def AsymmetricCipher():
                 ),
     ]
     asymmetricCipher = inquirer.prompt(asymmetricCipher)["asymmetricCipher"]
-    print(asymmetricCipher)
+    if asymmetricCipher == "RSA":
+        clearTerminal()
+        runRSA()
 
 def EllipticCurve():
     ellipticCurve = [
@@ -114,17 +307,6 @@ def EllipticCurve():
     ]
     ellipticCurve = inquirer.prompt(ellipticCurve)["ellipticCurve"]
     print(ellipticCurve)
-
-
-def Decrypt():
-    dec = [
-    inquirer.List('decryption',
-                    message="Type of Decryption?",
-                    choices=['Classical','Block Cipher','Asymmetric Cipher','Elliptic Curve'],
-                ),
-    ]
-    dec = inquirer.prompt(dec)["decryption"]
-    print(dec)
 
 def Hash():
     hashType = [
@@ -144,7 +326,9 @@ def Sign():
                 ),
     ]
     signType = inquirer.prompt(signType)["sign"]
-    print(signType)
+    if signType == "RSA":
+        clearTerminal()
+        runRSA()
 
 def ExchangeKeys():
     exchangeType = [
@@ -154,7 +338,9 @@ def ExchangeKeys():
                 ),
     ]
     exchangeType = inquirer.prompt(exchangeType)["exchange"]
-    print(exchangeType)
+    if exchangeType == "Diffie-Hellman":
+        clearTerminal()
+        runDH()
 
 def SecretSharing():
     secretType = [
@@ -164,9 +350,11 @@ def SecretSharing():
                 ),
     ]
     secretType = inquirer.prompt(secretType)["secret"]
-    print(secretType)
+    if secretType == "Shamir":
+        clearTerminal()
+        runSSS()
 
-def AES():
+def AESChoice():
     aes = [
     inquirer.List('aes',
                     message="Type of AES?",
@@ -176,8 +364,35 @@ def AES():
     aes = inquirer.prompt(aes)["aes"]
     print(aes)
 
-def DES():
+def DESChoice():
     pass
+
+
+def messageAndKey():
+    message = [
+    inquirer.Text('message',
+                    message="Enter your message",
+                ),
+    ]
+    message = inquirer.prompt(message)["message"]
+
+    key = [
+    inquirer.Text('key',
+                    message="Enter your key",
+                ),
+    ]
+    key = inquirer.prompt(key)["key"]
+
+    return message, key
+
+
+
+
+
+
+
+
+
 
 questions = [
   inquirer.List('type',
@@ -187,27 +402,29 @@ questions = [
 ]
 answers = inquirer.prompt(questions)["type"]
 
-if answers == "Encrypt":
-    clearTerminal()
-    Encrypt()
-elif answers == "Decrypt":
-    clearTerminal()
-    Decrypt()
-elif answers == "Hash":
-    clearTerminal()
-    Hash()
-elif answers == "Sign":
-    clearTerminal()
-    Sign()
-elif answers == "Exchange Keys":
-    clearTerminal()
-    ExchangeKeys()
-elif answers == "Secret Sharing":
-    clearTerminal()
-    SecretSharing()
-else:
-    print("Invalid Choice")
-    exit()
+
+if __name__ == "__main__":
+    if answers == "Encrypt":
+        clearTerminal()
+        Encrypt()
+    elif answers == "Decrypt":
+        clearTerminal()
+        Decrypt()
+    elif answers == "Hash":
+        clearTerminal()
+        Hash()
+    elif answers == "Sign":
+        clearTerminal()
+        Sign()
+    elif answers == "Exchange Keys":
+        clearTerminal()
+        ExchangeKeys()
+    elif answers == "Secret Sharing":
+        clearTerminal()
+        SecretSharing()
+    else:
+        print("Invalid Choice")
+        exit()
 
 
 

@@ -30,9 +30,35 @@ class SSS:
         return int(polynomial.coeffs[0])
 
 
-if __name__ == "__main__":
-    sss = SSS(5,3,7)
-    shares = sss.generate_shares(141592)
-    print(shares)
-    secret = sss.recover_secret(shares[:18])
-    print((secret))
+def runSSS():
+    genRec = int(input("Enter 1 for generating shares, 0 for recovering secret: "))
+    n = int(input("Enter number of shares: "))
+    t = int(input("Enter threshold: "))
+    prime = int(input("Enter prime number: "))
+    sss = SSS(n, t, prime)
+
+    if genRec == 1:
+        secret = int(input("secret number to be shared: "))
+        shares = sss.generate_shares(secret)
+        # print the shares in a table
+        print("Shares:")
+        for i in range(len(shares)):
+            print("Share", i+1, ":", shares[i])
+        print("")
+    
+    elif genRec == 0:
+        shares = input("Enter the coordinates separated by a comma")
+        shares = shares.split("),(")
+        shares = [i.replace("(","").replace(")","").split(",") for i in shares]
+        shares = [(int(i[0]),int(i[1])) for i in shares]
+        secret = sss.recover_secret(shares)
+        print("Secret:", secret)
+
+
+
+# if __name__ == "__main__":
+#     sss = SSS(5,3,7)
+#     shares = sss.generate_shares(141592)
+#     print(shares)
+#     secret = sss.recover_secret(shares[:18])
+#     print((secret))
