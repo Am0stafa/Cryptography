@@ -1,5 +1,5 @@
 ## TODO:
-- file import
+- CLI
 - elgamal
 - ECC diffie hellman,signing ,elgamal
 
